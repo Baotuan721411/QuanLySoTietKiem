@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{45E665FA-A971-43C3-978D-5BDDD688ACA0}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>QuanLiSoTietKiem</RootNamespace>
-    <AssemblyName>QuanLiSoTietKiem</AssemblyName>
+    <RootNamespace>QuanLySoTietKiem</RootNamespace>
+    <AssemblyName>QuanLySoTietKiem</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -95,7 +95,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="QuanLy\Views\MainWindow.xaml">
+    <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -103,14 +103,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="QuanLy\BLL\CheckRequirements.cs" />
-    <Compile Include="QuanLy\DAL\DataProcessing.cs" />
-    <Compile Include="QuanLy\Helpers\RelayCommand.cs" />
-    <Compile Include="QuanLy\Models\LoaiTietKiem.cs" />
-    <Compile Include="QuanLy\Models\SoTietKiem.cs" />
-    <Compile Include="QuanLy\Models\ThamSo.cs" />
-    <Compile Include="QuanLy\ViewModels\MainViewModels.cs" />
-    <Compile Include="QuanLy\Views\MainWindow.xaml.cs">
+    <Compile Include="Data\SavingsRepository.cs" />
+    <Compile Include="Helpers\RelayCommand.cs" />
+    <Compile Include="Models\LoaiTietKiem.cs" />
+    <Compile Include="Models\SoTietKiem.cs" />
+    <Compile Include="Models\ThamSo.cs" />
+    <Compile Include="Services\SavingsService.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
@@ -141,9 +141,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="quan_ly_so_tiet_kiem.sql" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

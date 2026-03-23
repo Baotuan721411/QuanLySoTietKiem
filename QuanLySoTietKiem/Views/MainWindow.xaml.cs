@@ -1,5 +1,6 @@
-﻿using System.Windows;
-namespace QuanLiSoTietKiem.QuanLy.Views
+using System.Windows;
+
+namespace QuanLySoTietKiem.Views
 {
     public partial class MainWindow : Window
     {
