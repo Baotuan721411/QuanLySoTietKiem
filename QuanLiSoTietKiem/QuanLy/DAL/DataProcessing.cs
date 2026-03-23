@@ -5,7 +5,7 @@ namespace QuanLiSoTietKiem.QuanLy.DAL
 {
     public class DataProcessing
     {
-        private string connStr = "Server=localhost;Database=quan_ly_so_tiet_kiem;Uid=root;Pwd=123456;";
+        private string connStr = "Server=localhost;Database=quan_ly_so_tiet_kiem;Uid=root;Pwd=123456;SslMode=None;";
 
         public List<LoaiTietKiem> GetLoaiTietKiems()
         {
