@@ -31,18 +31,24 @@ namespace QuanLiSoTietKiem.QuanLy.ViewModels
         private int? _selectedLoaiId;
         public int? SelectedLoaiId { get => _selectedLoaiId; set { _selectedLoaiId = value; OnPropertyChanged("SelectedLoaiId"); } }
 
+        // --- Khai báo các Command (Sửa lỗi CS0103) ---
         public ICommand TiepNhanCommand { get; }
         public ICommand TaoMoiCommand { get; }
-        public ICommand ThongBaoCapNhatCommand { get; } 
+        public ICommand TimKiemCommand { get; }
+        public ICommand CapNhatCommand { get; }
+        public ICommand XoaCommand { get; }
         public ICommand ThoatCommand { get; }
 
         public MainViewModels()
         {
             ListLoaiTK = new ObservableCollection<LoaiTietKiem>(_bll.GetLoaiTietKiems());
 
+            // Gán logic cho Command
             TiepNhanCommand = new RelayCommand(o => HandleSubmit());
             TaoMoiCommand = new RelayCommand(o => ResetForm());
-            ThongBaoCapNhatCommand = new RelayCommand(o => MessageBox.Show("Hiện tại tính năng đang trong quá trình cập nhật", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information));
+            TimKiemCommand = new RelayCommand(o => HandleSearch());
+            CapNhatCommand = new RelayCommand(o => HandleUpdate());
+            XoaCommand = new RelayCommand(o => HandleDelete());
             ThoatCommand = new RelayCommand(o => Application.Current.Shutdown());
         }
 
@@ -87,6 +93,79 @@ namespace QuanLiSoTietKiem.QuanLy.ViewModels
                 MessageBox.Show("Tiếp nhận thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else MessageBox.Show(res, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        private void HandleSearch()
+        {
+            // Tìm theo Tên hoặc Mã hiện có trong ô nhập
+            string keyword = !string.IsNullOrWhiteSpace(TenKH) ? TenKH : (MaSo != "<Giá trị tự động>" ? MaSo : "");
+
+            if (string.IsNullOrEmpty(keyword))
+            {
+                MessageBox.Show("Vui lòng nhập Tên hoặc Mã sổ để tìm kiếm!");
+                return;
+            }
+
+            var list = _bll.SearchSoTietKiem(keyword);
+            if (list.Count > 0)
+            {
+                var s = list[0];
+                MaSo = s.MaSo;
+                TenKH = s.TenKH;
+                SoTienStr = s.SoTien.ToString();
+                NgaySinh = s.NgaySinh;
+                NgayMoSo = s.NgayMoSo;
+                CCCD = s.CCCD;
+                DiaChi = s.DiaChi;
+                SelectedLoaiId = s.MaLoaiTietKiem;
+            }
+            else MessageBox.Show("Không tìm thấy sổ!");
+        }
+
+        private void HandleUpdate()
+        {
+            if (MaSo == "<Giá trị tự động>")
+            {
+                MessageBox.Show("Vui lòng tìm sổ trước khi cập nhật!");
+                return;
+            }
+
+            decimal.TryParse(SoTienStr, out decimal st);
+            var so = new SoTietKiem
+            {
+                MaSo = MaSo,
+                TenKH = TenKH,
+                SoTien = st,
+                NgaySinh = NgaySinh,
+                CCCD = CCCD,
+                DiaChi = DiaChi,
+                MaLoaiTietKiem = SelectedLoaiId ?? 0,
+                NgayMoSo = NgayMoSo
+            };
+
+            string res = _bll.ValidateAndUpdate(so);
+            if (res == "SUCCESS")
+                MessageBox.Show("Cập nhật thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+            else
+                MessageBox.Show(res, "Lỗi cập nhật", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        private void HandleDelete()
+        {
+            if (MaSo == "<Giá trị tự động>") return;
+
+            if (MessageBox.Show($"Bạn có chắc muốn xóa sổ {MaSo}?", "Xác nhận xóa", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                if (_bll.DeleteSoTietKiem(MaSo))
+                {
+                    MessageBox.Show("Đã xóa thành công!");
+                    ResetForm();
+                }
+                else
+                {
+                    MessageBox.Show("Xóa thất bại!");
+                }
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

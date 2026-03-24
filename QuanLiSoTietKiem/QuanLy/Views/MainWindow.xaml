@@ -100,11 +100,11 @@
 
             <Button Content="Tạo sổ mới" Command="{Binding TaoMoiCommand}" Background="#4DA6FF"/>
 
-            <Button Content="Tìm sổ" Command="{Binding ThongBaoCapNhatCommand}" Background="#4DA6FF"/>
+            <Button Content="Tìm sổ" Command="{Binding TimKiemCommand}" Background="#4DA6FF"/>
 
-            <Button Content="Xóa sổ" Command="{Binding ThongBaoCapNhatCommand}" Background="#4DA6FF"/>
+            <Button Content="Xóa sổ" Command="{Binding XoaCommand}" Background="#4DA6FF"/>
 
-            <Button Content="Cập nhật sổ" Command="{Binding ThongBaoCapNhatCommand}" Background="#4DA6FF"/>
+            <Button Content="Cập nhật sổ" Command="{Binding CapNhatCommand}" Background="#4DA6FF"/>
 
             <Button Content="Thoát" Command="{Binding ThoatCommand}" Background="#FF4D4D"/>
         </WrapPanel>
