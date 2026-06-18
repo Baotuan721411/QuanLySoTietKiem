@@ -25,7 +25,7 @@ CREATE TABLE tham_so (
     Id INT PRIMARY KEY DEFAULT 1, -- Luôn là dòng số 1
     SoTienToiThieu DECIMAL(15, 2) NOT NULL,
     BoiSoTienGui DECIMAL(15, 2) NOT NULL,
-    DoTuoiToiThieu INT NOT NULL,
+    DoTuoiToiThieu INT NOT NULL,so_tiet_kiem
     CONSTRAINT chk_only_one_row CHECK (Id = 1) -- Đảm bảo bảng chỉ có duy nhất 1 cấu hình
 );
 
@@ -37,3 +37,17 @@ INSERT INTO quan_ly_so_tiet_kiem.loai_tiet_kiem (TenLoaiTietKiem) VALUES
 
 INSERT INTO tham_so (Id, SoTienToiThieu, BoiSoTienGui, DoTuoiToiThieu) 
 VALUES (1, 200000, 10000, 18);
+delete from quan_ly_so_tiet_kiem.so_tiet_kiem
+where MaLoaiTietKiem = 3;
+-- 5. Tạo bảng phiếu gởi tiền 
+CREATE TABLE phieu_goi (
+    MaPhieuGoi VARCHAR(10) PRIMARY KEY,
+    MaSo VARCHAR(20) NOT NULL,
+    SoTienGoi DECIMAL(15, 2) NOT NULL,
+    NgayGoi DATE NOT NULL,
+    FOREIGN KEY (MaSo) REFERENCES so_tiet_kiem(MaSo)
+);
+ALTER TABLE tham_so 
+ADD COLUMN LoaiTietKiemGoi VARCHAR(50),
+ADD COLUMN SoTienGoiThemToiThieu DECIMAL(18,2);
+UPDATE tham_so SET LoaiTietKiemGoi = 'Không kỳ hạn', SoTienGoiThemToiThieu = 100000 LIMIT 1;

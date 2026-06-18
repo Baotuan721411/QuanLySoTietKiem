@@ -1,0 +1,151 @@
+﻿<UserControl x:Class="QuanLiSoTietKiem.QuanLy.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:QuanLiSoTietKiem.QuanLy.ViewModels"
+        Background="#F5F2DF">
+
+    <UserControl.Resources>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="6,0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style TargetType="ComboBox">
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+
+        <Style TargetType="DatePicker">
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="Width" Value="105"/>
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+
+        <!-- Converter: bool → Visibility -->
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+
+    </UserControl.Resources>
+
+    <Grid Margin="18">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- TITLE -->
+        <TextBlock Text="Quản lý sổ tiết kiệm"
+                   FontSize="22"
+                   FontWeight="Bold"
+                   Foreground="#222"
+                   Margin="0,0,0,18"/>
+
+        <!-- FORM -->
+        <Grid Grid.Row="1">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- HÀNG 1 -->
+            <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,10,10">
+                <TextBlock Text="Mã sổ:" FontWeight="SemiBold" Margin="0,0,0,3"/>
+                <TextBox Text="{Binding MaSo}" IsEnabled="False" Background="#EEEEEE"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,0,10,10">
+                <TextBlock Text="Loại tiết kiệm:" FontWeight="SemiBold" Margin="0,0,0,3"/>
+                <ComboBox ItemsSource="{Binding ListLoaiTK}"
+                          SelectedValuePath="MaLoaiTietKiem"
+                          DisplayMemberPath="TenLoaiTietKiem"
+                          SelectedValue="{Binding SelectedLoaiId}"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,10">
+                <TextBlock Text="Ngày mở sổ:" FontWeight="SemiBold" Margin="0,0,0,3"/>
+                <DatePicker SelectedDate="{Binding NgayMoSo}"/>
+            </StackPanel>
+
+            <!-- HÀNG 2 -->
+            <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,10,10">
+                <TextBlock Text="Khách hàng:" FontWeight="SemiBold" Margin="0,0,0,3"/>
+                <TextBox Text="{Binding TenKH}"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,0,10,10">
+                <TextBlock Text="CCCD:" FontWeight="SemiBold" Margin="0,0,0,3"/>
+                <TextBox Text="{Binding CCCD}"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,0,0,10">
+                <TextBlock Text="Địa chỉ:" FontWeight="SemiBold" Margin="0,0,0,3"/>
+                <TextBox Text="{Binding DiaChi}"/>
+            </StackPanel>
+
+            <!-- HÀNG 3 -->
+            <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,10,10">
+                <TextBlock Text="Ngày sinh:" FontWeight="SemiBold" Margin="0,0,0,3"/>
+                <DatePicker SelectedDate="{Binding NgaySinh}"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,0,10,10">
+                <TextBlock Text="Độ tuổi:" FontWeight="SemiBold" Margin="0,0,0,3"/>
+                <TextBox Text="{Binding DoTuoi}" IsEnabled="False" Background="#EEEEEE"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Grid.Column="2" Margin="0,0,0,10">
+                <TextBlock Text="Quy định Độ tuổi tối thiểu:" FontWeight="SemiBold" Margin="0,0,0,3"/>
+                <TextBox Text="{Binding QuyDinhTuoi}" IsEnabled="False" Background="#EEEEEE"/>
+            </StackPanel>
+
+            <!-- HÀNG 4 -->
+            <StackPanel Grid.Row="3" Grid.Column="0" Margin="0,0,10,0">
+                <TextBlock Text="Số tiền gửi:" FontWeight="SemiBold" Margin="0,0,0,3"/>
+                <TextBox Text="{Binding SoTienStr}"/>
+            </StackPanel>
+
+            <!--
+             
+            -->
+            <StackPanel Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2">
+                <TextBlock Text="Quy định Số tiền gửi tối thiểu:" FontWeight="SemiBold" Margin="0,0,0,3"/>
+                <TextBox Text="{Binding QuyDinhTienGuiToiThieu}" IsEnabled="False" Background="#EEEEEE"/>
+            </StackPanel>
+
+        </Grid>
+
+        <!-- BUTTON -->
+        <UniformGrid Grid.Row="2" Columns="6" Margin="0,18,0,0">
+            <Button Content="Tiếp nhận sổ"  Command="{Binding TiepNhanCommand}" Background="#4DA6FF"/>
+            <Button Content="Tạo sổ mới"    Command="{Binding TaoMoiCommand}"   Background="#4DA6FF"/>
+            <Button Content="Tìm sổ"        Command="{Binding TimKiemCommand}"  Background="#4DA6FF"/>
+            <Button Content="Xóa sổ"        Command="{Binding XoaCommand}"      Background="#4DA6FF"/>
+            <Button Content="Cập nhật sổ"   Command="{Binding CapNhatCommand}"  Background="#4DA6FF"/>
+            <!-- Nút Thoát bỏ đi vì đã có sidebar -->
+        </UniformGrid>
+
+    </Grid>
+</UserControl>

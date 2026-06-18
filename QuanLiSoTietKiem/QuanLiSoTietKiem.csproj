@@ -95,7 +95,61 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="QuanLy\Views\MainWindow.xaml">
+    <Compile Include="QuanLy\BLL\QuanLyQuyDinhBLL.cs" />
+    <Compile Include="QuanLy\DAL\QuanLyQuyDinhDataProcessing.cs" />
+    <Compile Include="QuanLy\Models\BaoCaoMoDongSoModel.cs" />
+    <Compile Include="QuanLy\Models\LichSuLaiSuat.cs" />
+    <Compile Include="QuanLy\ViewModels\BaoCaoMoDongSoViewModel.cs" />
+    <Compile Include="QuanLy\ViewModels\QuanLyQuyDinhViewModel.cs" />
+    <Compile Include="QuanLy\Views\BaoCaoDoanhThuWindow.xaml.cs">
+      <DependentUpon>BaoCaoDoanhThuWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="QuanLy\Views\BaoCaoMoDongSoWindow.xaml.cs">
+      <DependentUpon>BaoCaoMoDongSoWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="QuanLy\Views\MainMenuWindow.xaml.cs">
+      <DependentUpon>MainMenuWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="QuanLy\Views\PhieuGoiTien.xaml.cs">
+      <DependentUpon>PhieuGoiTien.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="QuanLy\Views\PhieuRutTien.xaml.cs">
+      <DependentUpon>PhieuRutTien.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="QuanLy\Views\QuanLyQuyDinh.xaml.cs">
+      <DependentUpon>QuanLyQuyDinh.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="QuanLy\Views\TraCuuSoTietKiem.xaml.cs">
+      <DependentUpon>TraCuuSoTietKiem.xaml</DependentUpon>
+    </Compile>
+    <Page Include="QuanLy\Views\BaoCaoDoanhThuWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="QuanLy\Views\BaoCaoMoDongSoWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="QuanLy\Views\MainMenuWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="QuanLy\Views\QuanLyQuyDinh.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="QuanLy\Views\TraCuuSoTietKiem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="QuanLy\Views\PhieuRutTien.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="QuanLy\Views\PhieuGoiTien.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="QuanLy\Views\QuanLiSoTietKiem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -103,15 +157,28 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="QuanLy\BLL\CheckRequirements.cs" />
-    <Compile Include="QuanLy\DAL\DataProcessing.cs" />
+    <Compile Include="QuanLy\BLL\PhieuGoiBLL.cs" />
+    <Compile Include="QuanLy\BLL\PhieuRutBLL.cs" />
+    <Compile Include="QuanLy\BLL\SoTietKiemBLL.cs" />
+    <Compile Include="QuanLy\DAL\SoTietKiemDataProcessing.cs" />
+    <Compile Include="QuanLy\DAL\PhieuGoiDataProcessing.cs" />
+    <Compile Include="QuanLy\DAL\PhieuRutDataProcessing.cs" />
     <Compile Include="QuanLy\Helpers\RelayCommand.cs" />
+    <Compile Include="QuanLy\Models\BaoCaoDoanhThuModel.cs" />
+    <Compile Include="QuanLy\Models\SearchFilter.cs" />
+    <Compile Include="QuanLy\Models\SoTietKiemDisplayModel.cs" />
+    <Compile Include="QuanLy\Models\PhieuGoi.cs" />
     <Compile Include="QuanLy\Models\LoaiTietKiem.cs" />
+    <Compile Include="QuanLy\Models\PhieuRut.cs" />
     <Compile Include="QuanLy\Models\SoTietKiem.cs" />
     <Compile Include="QuanLy\Models\ThamSo.cs" />
-    <Compile Include="QuanLy\ViewModels\MainViewModels.cs" />
-    <Compile Include="QuanLy\Views\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="QuanLy\ViewModels\BaoCaoDoanhThuViewModel.cs" />
+    <Compile Include="QuanLy\ViewModels\PhieuRutViewModel.cs" />
+    <Compile Include="QuanLy\ViewModels\TraCuuSoTietKiemViewModel.cs" />
+    <Compile Include="QuanLy\ViewModels\SoTietKiemViewModel.cs" />
+    <Compile Include="QuanLy\ViewModels\PhieuGoiViewModel.cs" />
+    <Compile Include="QuanLy\Views\QuanLiSoTietKiem.xaml.cs">
+      <DependentUpon>QuanLiSoTietKiem.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

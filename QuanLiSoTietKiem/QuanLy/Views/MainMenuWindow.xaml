@@ -1,0 +1,132 @@
+<Window x:Class="QuanLiSoTietKiem.MainMenuWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Quản Lý Sổ Tiết Kiệm"
+        Height="650" Width="1100"
+        WindowStartupLocation="CenterScreen"
+        Background="#2C3E50">
+
+    <Window.Resources>
+        <Style x:Key="MenuButtonStyle" TargetType="RadioButton">
+            <Setter Property="Height" Value="52"/>
+            <Setter Property="Foreground" Value="#BDC3C7"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Padding" Value="20,0,0,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border x:Name="Bd"
+                                Background="{TemplateBinding Background}"
+                                BorderThickness="4,0,0,0"
+                                BorderBrush="Transparent"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#1A252F"/>
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="#3498DB"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#34495E"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="210"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- ===== SIDEBAR ===== -->
+        <DockPanel Grid.Column="0" Background="#2C3E50" LastChildFill="False">
+
+            <!-- Header -->
+            <Border DockPanel.Dock="Top" Background="#1A252F" Padding="16,22">
+                <StackPanel>
+                    <TextBlock Text="🏦" FontSize="28" HorizontalAlignment="Center"/>
+                    <TextBlock Text="SỔ TIẾT KIỆM"
+                               Foreground="White" FontSize="13" FontWeight="Bold"
+                               HorizontalAlignment="Center" Margin="0,6,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Nav items -->
+            <StackPanel DockPanel.Dock="Top" Margin="0,12,0,0">
+                <RadioButton Content="  Quản lý sổ tiết kiệm"
+                             GroupName="Menu"
+                             Style="{StaticResource MenuButtonStyle}"
+                             IsChecked="True"
+                             Tag="QuanLy"
+                             Checked="MenuButton_Checked"/>
+
+                <RadioButton Content="  Lập phiếu gởi tiền"
+                             GroupName="Menu"
+                             Style="{StaticResource MenuButtonStyle}"
+                             Tag="PhieuGoi"
+                             Checked="MenuButton_Checked"/>
+
+                <RadioButton Content="  Lập phiếu rút tiền"
+                             GroupName="Menu"
+                             Style="{StaticResource MenuButtonStyle}"
+                             Tag="PhieuRut"
+                             Checked="MenuButton_Checked"/>
+
+                <RadioButton Content="  Tra cứu sổ tiết kiệm"
+                             GroupName="Menu"
+                             Style="{StaticResource MenuButtonStyle}"
+                             Tag="TraCuu"
+                             Checked="MenuButton_Checked"/>
+
+                <RadioButton Content="  Lập báo cáo doanh thu"
+                             GroupName="Menu"
+                             Style="{StaticResource MenuButtonStyle}"
+                             Tag="BaoCaoDoanhThu"
+                             Checked="MenuButton_Checked"/>
+
+                <RadioButton Content="  Lập báo cáo Mở/Đóng sổ"
+                             GroupName="Menu"
+                             Style="{StaticResource MenuButtonStyle}"
+                             Tag="BaoCaoMoDong"
+                             Checked="MenuButton_Checked"/>
+				<RadioButton Content="  Quản lý quy định"
+                 GroupName="Menu"
+                 Style="{StaticResource MenuButtonStyle}"
+                 Tag="QuanLyQuyDinh"
+                 Checked="MenuButton_Checked"/>
+            </StackPanel>
+
+            <!-- Thoát ở dưới cùng -->
+            <Button DockPanel.Dock="Bottom"
+                    Content="⏻   Thoát"
+                    Click="Thoat_Click"
+                    Margin="16,16"
+                    Height="42"
+                    Background="#C0392B"
+                    Foreground="White"
+                    FontSize="13"
+                    FontWeight="Bold"
+                    BorderThickness="0"
+                    Cursor="Hand"/>
+        </DockPanel>
+
+        <!-- ===== CONTENT AREA ===== -->
+        <Border Grid.Column="1" Background="#F5F2E8">
+            <ContentControl x:Name="ContentArea"/>
+        </Border>
+
+    </Grid>
+</Window>

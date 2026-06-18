@@ -2,8 +2,12 @@
 {
     public class ThamSo
     {
-        public decimal SoTienToiThieu { get; set; }
+        
         public decimal BoiSoTienGui { get; set; }
         public int DoTuoiToiThieu { get; set; }
+
+        public string LoaiTietKiemGoi { get; set; }
+        
+        public decimal SoTienGoiThemToiThieu { get; set; }
     }
 }
