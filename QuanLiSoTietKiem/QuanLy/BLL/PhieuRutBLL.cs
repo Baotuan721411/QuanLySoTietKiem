@@ -9,7 +9,8 @@ namespace QuanLiSoTietKiem.QuanLy.BLL
     {
         private readonly SoTietKiemDataProcessing _db = new SoTietKiemDataProcessing();
         private readonly PhieuRutDataProcessing _dbRut = new PhieuRutDataProcessing();
-
+        private readonly LoaiTietKiemDataProcessing _ltk = new LoaiTietKiemDataProcessing();
+        private readonly LichSuLaiSuatDataProcessing _ls = new LichSuLaiSuatDataProcessing();
         public string GetNextMaPhieuRut() => _dbRut.GetNextMaPhieuRut();
 
         public string ValidateAndSavePhieuRut(PhieuRut phieu, string tenKH)
@@ -26,7 +27,7 @@ namespace QuanLiSoTietKiem.QuanLy.BLL
                 return "Họ tên khách hàng không khớp với chủ sở hữu sổ tiết kiệm này!";
 
             // ── 2. Đọc thông tin loại tiết kiệm ──────────────────────────────
-            LoaiTietKiem loai = _db.GetLoaiTietKiemByMaSo(phieu.MaSo);
+            LoaiTietKiem loai = _ltk.GetLoaiTietKiemByMaSo(phieu.MaSo);
             if (loai == null)
                 return "Lỗi hệ thống: Không tìm thấy loại tiết kiệm!";
 
@@ -50,7 +51,7 @@ namespace QuanLiSoTietKiem.QuanLy.BLL
                     : stk.NgayMoSo;
 
             // ── 5. Lấy lịch sử lãi suất ──────────────────────────────────────
-            List<LichSuLaiSuat> lichSu = _db.GetLichSuLaiSuat(stk.MaLoaiTietKiem);
+            List<LichSuLaiSuat> lichSu = _ls.GetLichSuLaiSuat(stk.MaLoaiTietKiem);
             if (lichSu == null || lichSu.Count == 0)
                 return "Lỗi hệ thống: Không tìm thấy lịch sử lãi suất cho loại tiết kiệm này!";
 

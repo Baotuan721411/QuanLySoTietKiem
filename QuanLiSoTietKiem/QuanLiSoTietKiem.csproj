@@ -96,6 +96,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="QuanLy\BLL\QuanLyQuyDinhBLL.cs" />
+    <Compile Include="QuanLy\DAL\BaoCaoDoanhThuDataProcessing.cs" />
+    <Compile Include="QuanLy\DAL\BaoCaoMoDongSoDataProcessing.cs" />
+    <Compile Include="QuanLy\DAL\LichSuLaiSuatDataProcessing.cs" />
+    <Compile Include="QuanLy\DAL\LoaiTietKiemDataProcessing.cs" />
     <Compile Include="QuanLy\DAL\QuanLyQuyDinhDataProcessing.cs" />
     <Compile Include="QuanLy\Models\BaoCaoMoDongSoModel.cs" />
     <Compile Include="QuanLy\Models\LichSuLaiSuat.cs" />

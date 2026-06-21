@@ -13,7 +13,8 @@ namespace QuanLiSoTietKiem.QuanLy.BLL
     {
         private readonly SoTietKiemDataProcessing _db = new SoTietKiemDataProcessing();
         private readonly PhieuGoiDataProcessing _dbGoi = new PhieuGoiDataProcessing();
-
+        private readonly LoaiTietKiemDataProcessing _ltk = new LoaiTietKiemDataProcessing();
+        private readonly LichSuLaiSuatDataProcessing _ls = new LichSuLaiSuatDataProcessing();
         public string GetNextMaPhieuGoi() => _dbGoi.GetNextMaPhieuGoi();
 
         /// <summary>
@@ -42,7 +43,7 @@ namespace QuanLiSoTietKiem.QuanLy.BLL
             var ts = _db.GetThamSo();
             if (ts == null) return "Không tìm thấy tham số quy định trong hệ thống!";
 
-            var loaiCuaSo = _db.GetLoaiTietKiemById(soGoc.MaLoaiTietKiem);
+            var loaiCuaSo = _ltk.GetLoaiTietKiemById(soGoc.MaLoaiTietKiem);
             if (loaiCuaSo == null) return "Không tìm thấy loại tiết kiệm của sổ này!";
 
             if (loaiCuaSo.TenLoaiTietKiem != ts.LoaiTietKiemGoi)
@@ -82,7 +83,7 @@ namespace QuanLiSoTietKiem.QuanLy.BLL
             decimal kyHanThang = laKhongKyHan ? 1m : (loai.ThoiGianRutTien / 30m);
 
             // Lấy lịch sử lãi suất
-            List<LichSuLaiSuat> lichSu = _db.GetLichSuLaiSuat(loai.MaLoaiTietKiem);
+            List<LichSuLaiSuat> lichSu = _ls.GetLichSuLaiSuat(loai.MaLoaiTietKiem);
 
             // Dùng hàm tính lãi chung từ SoTietKiemBLL
             return SoTietKiemBLL.TinhTienLaiTheoPhanKy(

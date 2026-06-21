@@ -8,8 +8,11 @@ namespace QuanLiSoTietKiem.QuanLy.BLL
     public class SoTietKiemBLL
     {
         private readonly SoTietKiemDataProcessing _db = new SoTietKiemDataProcessing();
-
-        public List<LoaiTietKiem> GetLoaiTietKiems() => _db.GetLoaiTietKiems();
+        private readonly LoaiTietKiemDataProcessing _ltk = new LoaiTietKiemDataProcessing();
+        private readonly LichSuLaiSuatDataProcessing _ls = new LichSuLaiSuatDataProcessing();
+        private readonly BaoCaoMoDongSoDataProcessing _bcmodong = new BaoCaoMoDongSoDataProcessing();
+        private readonly BaoCaoDoanhThuDataProcessing _bcdoanhthu = new BaoCaoDoanhThuDataProcessing();
+        public List<LoaiTietKiem> GetLoaiTietKiems() => _ltk.GetLoaiTietKiems(); 
 
         public List<SoTietKiem> SearchSoTietKiem(string keyword) => _db.SearchSoTietKiem(keyword);
 
@@ -22,13 +25,13 @@ namespace QuanLiSoTietKiem.QuanLy.BLL
 
         public ThamSo GetThamSo() => _db.GetThamSo();
 
-        public LoaiTietKiem GetLoaiTietKiemByMaSo(string maSo) => _db.GetLoaiTietKiemByMaSo(maSo);
+        public LoaiTietKiem GetLoaiTietKiemByMaSo(string maSo) => _ltk.GetLoaiTietKiemByMaSo(maSo);
 
         /// <summary>
         /// Lấy lịch sử lãi suất của một loại tiết kiệm (sắp xếp theo NgayApDung tăng dần).
         /// </summary>
         public List<LichSuLaiSuat> GetLichSuLaiSuat(int maLoaiTietKiem)
-            => _db.GetLichSuLaiSuat(maLoaiTietKiem);
+            => _ls.GetLichSuLaiSuat(maLoaiTietKiem);
 
         /// <summary>
         /// Tra lãi suất đang có hiệu lực tại một ngày cụ thể.
@@ -139,7 +142,7 @@ namespace QuanLiSoTietKiem.QuanLy.BLL
         {
             var ts = _db.GetThamSo();
             if (ts == null) return "Lỗi hệ thống: Không thể lấy tham số!";
-            var loai = _db.GetLoaiTietKiemById(so.MaLoaiTietKiem);
+            var loai = _ltk.GetLoaiTietKiemById(so.MaLoaiTietKiem);
             if (loai == null) return "Lỗi hệ thống: Không tìm thấy loại tiết kiệm!";
 
             int tuoi = so.NgayMoSo.Year - (so.NgaySinh?.Year ?? so.NgayMoSo.Year);
@@ -158,21 +161,21 @@ namespace QuanLiSoTietKiem.QuanLy.BLL
         }
 
         public List<BaoCaoDoanhThuModel> GetBaoCaoDoanhThuTheoThang(int nam, int thang)
-            => _db.GetBaoCaoDoanhThuTheoThang(nam, thang);
+            => _bcdoanhthu.GetBaoCaoDoanhThuTheoThang(nam, thang);
 
         public List<SoTietKiem> GetSoTietKiemByLoai(int maLoaiTietKiem)
             => _db.GetSoTietKiemByLoai(maLoaiTietKiem);
 
         public List<PhieuGoi> GetPhieuGoiTheoThangNam(string maSo, int thang, int nam)
-            => _db.GetPhieuGoiTheoThangNam(maSo, thang, nam);
+            => _bcmodong.GetPhieuGoiTheoThangNam(maSo, thang, nam);
 
         public List<PhieuRut> GetPhieuRutTheoThangNam(string maSo, int thang, int nam)
-            => _db.GetPhieuRutTheoThangNam(maSo, thang, nam);
+            => _bcmodong.GetPhieuRutTheoThangNam(maSo, thang, nam);
 
         public int DemSoMoTheoNgayVaLoai(DateTime ngayN, int maLoai)
-            => _db.DemSoMoTheoNgayVaLoai(ngayN, maLoai);
+            => _bcmodong.DemSoMoTheoNgayVaLoai(ngayN, maLoai);
 
         public int DemSoDongTheoNgayVaLoai(DateTime ngayN, int maLoai)
-            => _db.DemSoDongTheoNgayVaLoai(ngayN, maLoai);
+            => _bcmodong.DemSoDongTheoNgayVaLoai(ngayN, maLoai);
     }
 }
