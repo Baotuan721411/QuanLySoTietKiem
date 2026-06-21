@@ -6,19 +6,15 @@ using System.Configuration;
 
 namespace QuanLiSoTietKiem.QuanLy.DAL
 {
-    /// <summary>
-    /// DAL cho QuanLyQuyDinh — chứa toàn bộ logic truy cập Database.
-    /// LaiSuat đã được xóa khỏi loai_tiet_kiem; lãi suất quản lý qua lich_su_lai_suat.
-    /// </summary>
     public class QuanLyQuyDinhDAL
     {
         private readonly string _connStr =
             ConfigurationManager.ConnectionStrings["MyDbConn"].ConnectionString;
 
         // ────────────────────────────────────────────────────────────────
-        //  B02: Đọc D2 — Danh sách toàn bộ Loại tiết kiệm từ CSDL
-        //  JOIN lich_su_lai_suat để lấy lãi suất đang áp dụng (NgayKetThuc IS NULL)
-        //  hiển thị lên DataGrid.
+        //  Danh sách toàn bộ loại tiết kiệm — JOIN lãi suất đang có hiệu lực
+        //  tại thời điểm hiện tại (CURDATE() nằm trong khoảng NgayApDung..NgayKetThuc)
+        //  để hiển thị lên DataGrid.
         // ────────────────────────────────────────────────────────────────
         public List<LoaiTietKiem> GetAll()
         {
@@ -26,7 +22,6 @@ namespace QuanLiSoTietKiem.QuanLy.DAL
             using (var conn = new MySqlConnection(_connStr))
             {
                 conn.Open();
-                // LEFT JOIN để vẫn hiện loại dù chưa có lịch sử lãi suất nào
                 var cmd = new MySqlCommand(
                     @"SELECT l.MaLoaiTietKiem, l.TenLoaiTietKiem,
                              l.ThoiGianRutTien, l.QuiDinhRutTien, l.TienGoiToiThieu,
@@ -34,20 +29,47 @@ namespace QuanLiSoTietKiem.QuanLy.DAL
                       FROM loai_tiet_kiem l
                       LEFT JOIN lich_su_lai_suat ls
                              ON ls.MaLoaiTietKiem = l.MaLoaiTietKiem
-                            AND ls.NgayKetThuc IS NULL
+                            AND ls.NgayApDung <= CURDATE()
+                            AND (ls.NgayKetThuc IS NULL OR ls.NgayKetThuc >= CURDATE())
                       ORDER BY l.MaLoaiTietKiem", conn);
                 using (var rdr = cmd.ExecuteReader())
-                {
-                    while (rdr.Read())
-                        list.Add(MapReader(rdr));
-                }
+                    while (rdr.Read()) list.Add(MapLoaiReader(rdr));
             }
             return list;
         }
 
         // ────────────────────────────────────────────────────────────────
-        //  TÌM KIẾM THEO TÊN — dùng cho nút Tìm kiếm trên UI
-        //  Trả về bản ghi khớp chính xác đầu tiên (kèm lãi suất hiện tại), hoặc null.
+        //  Lấy giai đoạn lãi suất đang có hiệu lực tại thời điểm hiện tại
+        //  của một loại tiết kiệm: NgayApDung <= CURDATE() và
+        //  (NgayKetThuc IS NULL hoặc NgayKetThuc >= CURDATE()).
+        //  Dùng để đổ NgayApDung, NgayKetThuc, LaiSuat chính xác lên form
+        //  khi người dùng click chọn một hàng trên DataGrid.
+        // ────────────────────────────────────────────────────────────────
+        public LichSuLaiSuat LayLichSuHienTai(int maLoai)
+        {
+            using (var conn = new MySqlConnection(_connStr))
+            {
+                conn.Open();
+                var cmd = new MySqlCommand(
+                    @"SELECT MaLichSuLaiSuat, MaLoaiTietKiem,
+                             LaiSuatCuaKyHan, NgayApDung, NgayKetThuc
+                      FROM lich_su_lai_suat
+                      WHERE MaLoaiTietKiem = @ma
+                        AND NgayApDung <= CURDATE()
+                        AND (NgayKetThuc IS NULL OR NgayKetThuc >= CURDATE())
+                      ORDER BY NgayApDung DESC
+                      LIMIT 1", conn);
+                cmd.Parameters.AddWithValue("@ma", maLoai);
+                using (var rdr = cmd.ExecuteReader())
+                {
+                    if (rdr.Read()) return MapLichSuReader(rdr);
+                }
+            }
+            return null;
+        }
+
+        // ────────────────────────────────────────────────────────────────
+        //  Tìm kiếm theo tên — trả về loại + lãi suất hiện tại, hoặc null
         // ────────────────────────────────────────────────────────────────
         public LoaiTietKiem TimKiemTheoTen(string tenLoai)
         {
@@ -61,21 +83,17 @@ namespace QuanLiSoTietKiem.QuanLy.DAL
                       FROM loai_tiet_kiem l
                       LEFT JOIN lich_su_lai_suat ls
                              ON ls.MaLoaiTietKiem = l.MaLoaiTietKiem
-                            AND ls.NgayKetThuc IS NULL
+                            AND ls.NgayApDung <= CURDATE()
+                            AND (ls.NgayKetThuc IS NULL OR ls.NgayKetThuc >= CURDATE())
                       WHERE l.TenLoaiTietKiem = @ten
                       LIMIT 1", conn);
                 cmd.Parameters.AddWithValue("@ten", tenLoai);
                 using (var rdr = cmd.ExecuteReader())
-                {
-                    if (rdr.Read()) return MapReader(rdr);
-                }
+                    if (rdr.Read()) return MapLoaiReader(rdr);
             }
             return null;
         }
 
-        // ────────────────────────────────────────────────────────────────
-        //  THÊM — B03 (Thêm): Kiểm tra tên đã tồn tại trong CSDL chưa
-        // ────────────────────────────────────────────────────────────────
         public bool TenLoaiDaTonTai(string tenLoai)
         {
             using (var conn = new MySqlConnection(_connStr))
@@ -88,9 +106,6 @@ namespace QuanLiSoTietKiem.QuanLy.DAL
             }
         }
 
-        // ────────────────────────────────────────────────────────────────
-        //  SỬA — B03 (Sửa): Kiểm tra MaLoai có tồn tại trong CSDL không
-        // ────────────────────────────────────────────────────────────────
         public bool MaLoaiTonTai(int maLoai)
         {
             using (var conn = new MySqlConnection(_connStr))
@@ -103,10 +118,6 @@ namespace QuanLiSoTietKiem.QuanLy.DAL
             }
         }
 
-        // ────────────────────────────────────────────────────────────────
-        //  XÓA — B03 (Xóa): Đọc D3 — Danh sách Sổ tiết kiệm chưa đáo hạn
-        //  (TrangThai = 1 tức đang mở) thuộc loại cần xóa
-        // ────────────────────────────────────────────────────────────────
         public bool CoSoTietKiemChuaDaoHan(int maLoai)
         {
             using (var conn = new MySqlConnection(_connStr))
@@ -114,29 +125,22 @@ namespace QuanLiSoTietKiem.QuanLy.DAL
                 conn.Open();
                 var cmd = new MySqlCommand(
                     @"SELECT COUNT(*) FROM so_tiet_kiem
-                      WHERE MaLoaiTietKiem = @ma
-                        AND TrangThai = 1", conn);
+                      WHERE MaLoaiTietKiem = @ma AND TrangThai = 1", conn);
                 cmd.Parameters.AddWithValue("@ma", maLoai);
                 return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
             }
         }
 
-        // ────────────────────────────────────────────────────────────────
-        //  B06 (Thêm): INSERT loại tiết kiệm — trả về ID vừa tạo
-        //  Không còn cột LaiSuat trong loai_tiet_kiem.
-        // ────────────────────────────────────────────────────────────────
         public int InsertLoai(LoaiTietKiem loai, MySqlConnection conn, MySqlTransaction tran)
         {
             var cmdMaxId = new MySqlCommand(
-                "SELECT IFNULL(MAX(MaLoaiTietKiem), 0) + 1 FROM loai_tiet_kiem",
-                conn, tran);
+                "SELECT IFNULL(MAX(MaLoaiTietKiem), 0) + 1 FROM loai_tiet_kiem", conn, tran);
             int newId = Convert.ToInt32(cmdMaxId.ExecuteScalar());
 
             var cmd = new MySqlCommand(
                 @"INSERT INTO loai_tiet_kiem
                     (MaLoaiTietKiem, TenLoaiTietKiem, ThoiGianRutTien, QuiDinhRutTien, TienGoiToiThieu)
-                  VALUES
-                    (@ma, @ten, @thoigian, @quydinh, @tiengui)",
+                  VALUES (@ma, @ten, @thoigian, @quydinh, @tiengui)",
                 conn, tran);
             cmd.Parameters.AddWithValue("@ma", newId);
             cmd.Parameters.AddWithValue("@ten", loai.TenLoaiTietKiem);
@@ -147,10 +151,6 @@ namespace QuanLiSoTietKiem.QuanLy.DAL
             return newId;
         }
 
-        // ────────────────────────────────────────────────────────────────
-        //  B06 (Sửa): UPDATE loại tiết kiệm — trả về số hàng ảnh hưởng
-        //  Không còn cột LaiSuat trong loai_tiet_kiem.
-        // ────────────────────────────────────────────────────────────────
         public int UpdateLoai(LoaiTietKiem loai, MySqlConnection conn, MySqlTransaction tran)
         {
             var cmd = new MySqlCommand(
@@ -169,65 +169,47 @@ namespace QuanLiSoTietKiem.QuanLy.DAL
             return cmd.ExecuteNonQuery();
         }
 
-        // ────────────────────────────────────────────────────────────────
-        //  B06 (Xóa): Xóa toàn bộ lịch sử lãi suất của loại đó
-        // ────────────────────────────────────────────────────────────────
         public void DeleteLichSuLaiSuat(int maLoai, MySqlConnection conn, MySqlTransaction tran)
         {
             var cmd = new MySqlCommand(
-                "DELETE FROM lich_su_lai_suat WHERE MaLoaiTietKiem = @ma",
-                conn, tran);
+                "DELETE FROM lich_su_lai_suat WHERE MaLoaiTietKiem = @ma", conn, tran);
             cmd.Parameters.AddWithValue("@ma", maLoai);
             cmd.ExecuteNonQuery();
         }
 
-        // ────────────────────────────────────────────────────────────────
-        //  B07 (Xóa): Xóa bản ghi loại tiết kiệm — trả về số hàng ảnh hưởng
-        // ────────────────────────────────────────────────────────────────
         public int DeleteLoai(int maLoai, MySqlConnection conn, MySqlTransaction tran)
         {
             var cmd = new MySqlCommand(
-                "DELETE FROM loai_tiet_kiem WHERE MaLoaiTietKiem = @ma",
-                conn, tran);
+                "DELETE FROM loai_tiet_kiem WHERE MaLoaiTietKiem = @ma", conn, tran);
             cmd.Parameters.AddWithValue("@ma", maLoai);
             return cmd.ExecuteNonQuery();
         }
 
-        // ────────────────────────────────────────────────────────────────
-        //  B07 (Thêm/Sửa): Đóng kỳ lịch sử lãi suất hiện tại
-        //  (NgayKetThuc = ngayApDung - 1 ngày)
-        // ────────────────────────────────────────────────────────────────
         public void DongKyLichSuCu(int maLoai, DateTime ngayApDung,
                                     MySqlConnection conn, MySqlTransaction tran)
         {
             var cmd = new MySqlCommand(
                 @"UPDATE lich_su_lai_suat
                   SET NgayKetThuc = @ngayKT
-                  WHERE MaLoaiTietKiem = @ma
-                    AND NgayKetThuc IS NULL",
+                  WHERE MaLoaiTietKiem = @ma AND NgayKetThuc IS NULL",
                 conn, tran);
             cmd.Parameters.AddWithValue("@ma", maLoai);
             cmd.Parameters.AddWithValue("@ngayKT", ngayApDung.AddDays(-1).Date);
             cmd.ExecuteNonQuery();
         }
 
-        // ────────────────────────────────────────────────────────────────
-        //  B07 (Thêm/Sửa): Ghi mới D4 vào CSDL Lịch sử lãi suất
-        // ────────────────────────────────────────────────────────────────
         public void GhiLichSuLaiSuat(int maLoai, decimal laiSuat,
                                       DateTime ngayApDung, DateTime? ngayKetThuc,
                                       MySqlConnection conn, MySqlTransaction tran)
         {
             var cmdMaxId = new MySqlCommand(
-                "SELECT IFNULL(MAX(MaLichSuLaiSuat), 0) + 1 FROM lich_su_lai_suat",
-                conn, tran);
+                "SELECT IFNULL(MAX(MaLichSuLaiSuat), 0) + 1 FROM lich_su_lai_suat", conn, tran);
             int newId = Convert.ToInt32(cmdMaxId.ExecuteScalar());
 
             var cmd = new MySqlCommand(
                 @"INSERT INTO lich_su_lai_suat
                     (MaLichSuLaiSuat, MaLoaiTietKiem, LaiSuatCuaKyHan, NgayApDung, NgayKetThuc)
-                  VALUES
-                    (@id, @ma, @ls, @ngayAD, @ngayKT)",
+                  VALUES (@id, @ma, @ls, @ngayAD, @ngayKT)",
                 conn, tran);
             cmd.Parameters.AddWithValue("@id", newId);
             cmd.Parameters.AddWithValue("@ma", maLoai);
@@ -239,26 +221,29 @@ namespace QuanLiSoTietKiem.QuanLy.DAL
             cmd.ExecuteNonQuery();
         }
 
-        // ────────────────────────────────────────────────────────────────
-        //  HELPER: map một hàng reader → LoaiTietKiem
-        //  Cột trả về: 0=MaLoai, 1=TenLoai, 2=ThoiGian, 3=QuiDinh,
-        //              4=TienGui, 5=LaiSuatHienTai (từ JOIN)
-        // ────────────────────────────────────────────────────────────────
-        private LoaiTietKiem MapReader(MySqlDataReader rdr) => new LoaiTietKiem
+        // ── Helpers ──────────────────────────────────────────────────────────
+
+        private LoaiTietKiem MapLoaiReader(MySqlDataReader rdr) => new LoaiTietKiem
         {
             MaLoaiTietKiem = rdr.GetInt32("MaLoaiTietKiem"),
             TenLoaiTietKiem = rdr.GetString("TenLoaiTietKiem"),
             ThoiGianRutTien = rdr.GetInt32("ThoiGianRutTien"),
             QuiDinhRutTien = rdr.GetInt32("QuiDinhRutTien"),
             TienGoiToiThieu = rdr.GetDecimal("TienGoiToiThieu"),
-            // LaiSuatHienTai là cột tính toán từ JOIN — map vào property tạm LaiSuat
-            // để ViewModel hiển thị lên form (không còn lưu trong loai_tiet_kiem)
             LaiSuat = rdr.GetDecimal("LaiSuatHienTai")
         };
 
-        // ────────────────────────────────────────────────────────────────
-        //  HELPER: tạo connection mới đã mở (BLL dùng để mở transaction)
-        // ────────────────────────────────────────────────────────────────
+        private LichSuLaiSuat MapLichSuReader(MySqlDataReader rdr) => new LichSuLaiSuat
+        {
+            MaLichSuLaiSuat = rdr.GetInt32("MaLichSuLaiSuat"),
+            MaLoaiTietKiem = rdr.GetInt32("MaLoaiTietKiem"),
+            LaiSuatCuaKyHan = rdr.GetDecimal("LaiSuatCuaKyHan"),
+            NgayApDung = rdr.GetDateTime("NgayApDung"),
+            NgayKetThuc = rdr.IsDBNull(rdr.GetOrdinal("NgayKetThuc"))
+                                  ? (DateTime?)null
+                                  : rdr.GetDateTime("NgayKetThuc")
+        };
+
         public MySqlConnection OpenConnection()
         {
             var conn = new MySqlConnection(_connStr);

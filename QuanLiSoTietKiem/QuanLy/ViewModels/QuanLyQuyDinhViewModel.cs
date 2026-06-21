@@ -9,10 +9,6 @@ using System.Windows.Input;
 
 namespace QuanLiSoTietKiem.QuanLy.ViewModels
 {
-    /// <summary>
-    /// Item dùng cho ComboBox "Quy định rút tiền".
-    /// GiaTri: 0 = Rút toàn bộ, 1 = Rút một phần (đúng quy ước lưu CSDL).
-    /// </summary>
     public class QuyDinhRutTienItem
     {
         public int GiaTri { get; set; }
@@ -23,21 +19,17 @@ namespace QuanLiSoTietKiem.QuanLy.ViewModels
     {
         private readonly QuanLyQuyDinhBLL _bll = new QuanLyQuyDinhBLL();
 
-        // ─── Mã loại đang chọn (giữ ngầm để Cập nhật/Xóa, KHÔNG hiển thị trên UI) ───
         private int? _maLoaiDangChon;
 
-        // ─── Danh sách hiển thị trên DataGrid ───────────────────────────
         public ObservableCollection<LoaiTietKiem> DanhSachLoaiTK { get; set; }
 
-        // ─── Danh sách cho ComboBox Quy định rút tiền ───────────────────
         public ObservableCollection<QuyDinhRutTienItem> DanhSachQuyDinhRutTien { get; }
             = new ObservableCollection<QuyDinhRutTienItem>
             {
-                new QuyDinhRutTienItem { GiaTri = 0, TenHienThi = "Rút toàn bộ" },
+                new QuyDinhRutTienItem { GiaTri = 0, TenHienThi = "Rút toàn bộ"  },
                 new QuyDinhRutTienItem { GiaTri = 1, TenHienThi = "Rút một phần" }
             };
 
-        // ─── Item đang chọn trên DataGrid ───────────────────────────────
         private LoaiTietKiem _selectedLoaiTK;
         public LoaiTietKiem SelectedLoaiTK
         {
@@ -45,9 +37,8 @@ namespace QuanLiSoTietKiem.QuanLy.ViewModels
             set { _selectedLoaiTK = value; OnPropertyChanged(nameof(SelectedLoaiTK)); }
         }
 
-        // ─── Các thuộc tính binding cho Form ────────────────────────────
+        // ── Binding Form ──────────────────────────────────────────────────────
 
-        // Tên Loại tiết kiệm
         private string _tenLoaiChiTiet = string.Empty;
         public string TenLoaiChiTiet
         {
@@ -55,7 +46,6 @@ namespace QuanLiSoTietKiem.QuanLy.ViewModels
             set { _tenLoaiChiTiet = value; OnPropertyChanged(nameof(TenLoaiChiTiet)); }
         }
 
-        // Ngày áp dụng (của lịch sử lãi suất)
         private DateTime _ngayApDung = DateTime.Today;
         public DateTime NgayApDung
         {
@@ -63,7 +53,6 @@ namespace QuanLiSoTietKiem.QuanLy.ViewModels
             set { _ngayApDung = value; OnPropertyChanged(nameof(NgayApDung)); }
         }
 
-        // Ngày kết thúc (của lịch sử lãi suất) — có thể để trống (đang áp dụng)
         private DateTime? _ngayKetThuc;
         public DateTime? NgayKetThuc
         {
@@ -78,7 +67,6 @@ namespace QuanLiSoTietKiem.QuanLy.ViewModels
             set { _tienGoiToiThieuStr = value; OnPropertyChanged(nameof(TienGoiToiThieuStr)); }
         }
 
-        // Thời gian gửi tối thiểu — đơn vị NGÀY
         private string _thoiGianGuiToiThieuStr = string.Empty;
         public string ThoiGianGuiToiThieuStr
         {
@@ -93,7 +81,6 @@ namespace QuanLiSoTietKiem.QuanLy.ViewModels
             set { _laiSuatStr = value; OnPropertyChanged(nameof(LaiSuatStr)); }
         }
 
-        // Quy định rút tiền: 0 = Rút toàn bộ, 1 = Rút một phần (binding với ComboBox.SelectedValue)
         private int _quiDinhRutTien;
         public int QuiDinhRutTien
         {
@@ -101,14 +88,13 @@ namespace QuanLiSoTietKiem.QuanLy.ViewModels
             set { _quiDinhRutTien = value; OnPropertyChanged(nameof(QuiDinhRutTien)); }
         }
 
-        // ─── Commands ────────────────────────────────────────────────────
+        // ── Commands ──────────────────────────────────────────────────────────
         public ICommand ThemMoiCommand { get; }
         public ICommand CapNhatCommand { get; }
         public ICommand XoaCommand { get; }
         public ICommand LamMoiCommand { get; }
         public ICommand TimKiemTheoTenCommand { get; }
 
-        // ─── Constructor ─────────────────────────────────────────────────
         public QuanLyQuyDinhViewModel()
         {
             DanhSachLoaiTK = new ObservableCollection<LoaiTietKiem>(_bll.GetAll());
@@ -120,7 +106,12 @@ namespace QuanLiSoTietKiem.QuanLy.ViewModels
             TimKiemTheoTenCommand = new RelayCommand(o => HandleTimKiemTheoTen());
         }
 
-        // ─── Đổ dữ liệu từ hàng được chọn lên Form ──────────────────────
+        // ── Đổ dữ liệu từ hàng được chọn lên Form ────────────────────────────
+        /// <summary>
+        /// Gọi khi người dùng click một hàng trên DataGrid.
+        /// Lấy thêm NgayApDung và NgayKetThuc chính xác từ lich_su_lai_suat
+        /// thay vì dùng DateTime.Today mặc định.
+        /// </summary>
         public void LoadSelectedToForm()
         {
             if (SelectedLoaiTK == null) return;
@@ -129,19 +120,35 @@ namespace QuanLiSoTietKiem.QuanLy.ViewModels
             TenLoaiChiTiet = SelectedLoaiTK.TenLoaiTietKiem;
             TienGoiToiThieuStr = SelectedLoaiTK.TienGoiToiThieu.ToString("N0");
             ThoiGianGuiToiThieuStr = SelectedLoaiTK.ThoiGianRutTien.ToString();
-            LaiSuatStr = SelectedLoaiTK.LaiSuat.ToString("N2");
             QuiDinhRutTien = SelectedLoaiTK.QuiDinhRutTien;
-            NgayApDung = DateTime.Today;   // Ngày áp dụng mới khi sửa lãi suất
-            NgayKetThuc = null;
+
+            // Lấy giai đoạn lãi suất đang có hiệu lực từ DB
+            var lichSuHienTai = _bll.LayLichSuHienTai(SelectedLoaiTK.MaLoaiTietKiem);
+            if (lichSuHienTai != null)
+            {
+                LaiSuatStr = lichSuHienTai.LaiSuatCuaKyHan.ToString("N2");
+                NgayApDung = lichSuHienTai.NgayApDung;
+                NgayKetThuc = lichSuHienTai.NgayKetThuc;  // null nếu đang áp dụng
+            }
+            else
+            {
+                // Chưa có lịch sử lãi suất → để trống, người dùng tự nhập
+                LaiSuatStr = string.Empty;
+                NgayApDung = DateTime.Today;
+                NgayKetThuc = null;
+            }
         }
 
-        // ─── Xây dựng đối tượng từ Form ──────────────────────────────────
+        // ── Xây dựng đối tượng từ Form ────────────────────────────────────────
         private LoaiTietKiem BuildFromForm()
         {
-            decimal.TryParse(TienGoiToiThieuStr.Replace(",", "").Replace(".", ""), out decimal tienGui);
+            decimal.TryParse(TienGoiToiThieuStr.Replace(",", "").Replace(".", ""),
+                             out decimal tienGui);
             int.TryParse(ThoiGianGuiToiThieuStr, out int thoiGian);
-            decimal.TryParse(LaiSuatStr.Replace(",", "."), System.Globalization.NumberStyles.Any,
-                             System.Globalization.CultureInfo.InvariantCulture, out decimal laiSuat);
+            decimal.TryParse(LaiSuatStr.Replace(",", "."),
+                             System.Globalization.NumberStyles.Any,
+                             System.Globalization.CultureInfo.InvariantCulture,
+                             out decimal laiSuat);
 
             return new LoaiTietKiem
             {
@@ -154,7 +161,6 @@ namespace QuanLiSoTietKiem.QuanLy.ViewModels
             };
         }
 
-        // ─── Validate form cơ bản ─────────────────────────────────────────
         private bool ValidateForm()
         {
             if (string.IsNullOrWhiteSpace(TenLoaiChiTiet))
@@ -191,11 +197,9 @@ namespace QuanLiSoTietKiem.QuanLy.ViewModels
             return true;
         }
 
-        // ─── THÊM MỚI ────────────────────────────────────────────────────
         private void HandleThemMoi()
         {
             if (!ValidateForm()) return;
-
             var loai = BuildFromForm();
             string res = _bll.ThemLoai(loai, NgayApDung, NgayKetThuc);
             if (res == "SUCCESS")
@@ -204,13 +208,9 @@ namespace QuanLiSoTietKiem.QuanLy.ViewModels
                                 MessageBoxButton.OK, MessageBoxImage.Information);
                 ResetForm();
             }
-            else
-            {
-                MessageBox.Show(res, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            else MessageBox.Show(res, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        // ─── CẬP NHẬT ────────────────────────────────────────────────────
         private void HandleCapNhat()
         {
             if (_maLoaiDangChon == null || _maLoaiDangChon == 0)
@@ -220,7 +220,6 @@ namespace QuanLiSoTietKiem.QuanLy.ViewModels
                 return;
             }
             if (!ValidateForm()) return;
-
             var loai = BuildFromForm();
             string res = _bll.CapNhatLoai(loai, NgayApDung, NgayKetThuc);
             if (res == "SUCCESS")
@@ -229,13 +228,9 @@ namespace QuanLiSoTietKiem.QuanLy.ViewModels
                                 MessageBoxButton.OK, MessageBoxImage.Information);
                 ResetForm();
             }
-            else
-            {
-                MessageBox.Show(res, "Lỗi cập nhật", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            else MessageBox.Show(res, "Lỗi cập nhật", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        // ─── XÓA ─────────────────────────────────────────────────────────
         private void HandleXoa()
         {
             if (_maLoaiDangChon == null || _maLoaiDangChon == 0)
@@ -249,7 +244,6 @@ namespace QuanLiSoTietKiem.QuanLy.ViewModels
                 $"Bạn có chắc muốn xóa loại tiết kiệm \"{TenLoaiChiTiet}\"?\n" +
                 "Lưu ý: Không thể xóa nếu còn sổ tiết kiệm đang dùng loại này!",
                 "Xác nhận xóa", MessageBoxButton.YesNo, MessageBoxImage.Question);
-
             if (confirm != MessageBoxResult.Yes) return;
 
             string res = _bll.XoaLoai(_maLoaiDangChon.Value);
@@ -259,13 +253,9 @@ namespace QuanLiSoTietKiem.QuanLy.ViewModels
                                 MessageBoxButton.OK, MessageBoxImage.Information);
                 ResetForm();
             }
-            else
-            {
-                MessageBox.Show(res, "Lỗi xóa", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            else MessageBox.Show(res, "Lỗi xóa", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        // ─── TÌM KIẾM THEO TÊN — đổ thông tin lên form nếu tìm thấy ────
         private void HandleTimKiemTheoTen()
         {
             if (string.IsNullOrWhiteSpace(TenLoaiChiTiet))
@@ -276,7 +266,6 @@ namespace QuanLiSoTietKiem.QuanLy.ViewModels
             }
 
             var ketQua = _bll.TimKiemTheoTen(TenLoaiChiTiet.Trim());
-
             if (ketQua == null)
             {
                 MessageBox.Show($"Không tìm thấy loại tiết kiệm có tên \"{TenLoaiChiTiet}\"!",
@@ -284,17 +273,28 @@ namespace QuanLiSoTietKiem.QuanLy.ViewModels
                 return;
             }
 
-            // Đổ thông tin lên form
             _maLoaiDangChon = ketQua.MaLoaiTietKiem;
             TenLoaiChiTiet = ketQua.TenLoaiTietKiem;
             TienGoiToiThieuStr = ketQua.TienGoiToiThieu.ToString("N0");
             ThoiGianGuiToiThieuStr = ketQua.ThoiGianRutTien.ToString();
-            LaiSuatStr = ketQua.LaiSuat.ToString("N2");
             QuiDinhRutTien = ketQua.QuiDinhRutTien;
-            NgayApDung = DateTime.Today;
-            NgayKetThuc = null;
 
-            // Đồng thời highlight hàng tương ứng trên DataGrid
+            // Lấy NgayApDung, NgayKetThuc, LaiSuat chính xác từ DB
+            var lichSuHienTai = _bll.LayLichSuHienTai(ketQua.MaLoaiTietKiem);
+            if (lichSuHienTai != null)
+            {
+                LaiSuatStr = lichSuHienTai.LaiSuatCuaKyHan.ToString("N2");
+                NgayApDung = lichSuHienTai.NgayApDung;
+                NgayKetThuc = lichSuHienTai.NgayKetThuc;
+            }
+            else
+            {
+                LaiSuatStr = string.Empty;
+                NgayApDung = DateTime.Today;
+                NgayKetThuc = null;
+            }
+
+            // Highlight hàng tương ứng trên DataGrid
             foreach (var item in DanhSachLoaiTK)
             {
                 if (item.MaLoaiTietKiem == ketQua.MaLoaiTietKiem)
@@ -305,7 +305,6 @@ namespace QuanLiSoTietKiem.QuanLy.ViewModels
             }
         }
 
-        // ─── LÀM MỚI form và load lại danh sách ─────────────────────────
         private void ResetForm()
         {
             _maLoaiDangChon = null;
@@ -320,7 +319,6 @@ namespace QuanLiSoTietKiem.QuanLy.ViewModels
             RefreshDanhSach();
         }
 
-        // ─── Load lại toàn bộ danh sách ──────────────────────────────────
         private void RefreshDanhSach()
         {
             DanhSachLoaiTK.Clear();
@@ -328,7 +326,6 @@ namespace QuanLiSoTietKiem.QuanLy.ViewModels
                 DanhSachLoaiTK.Add(item);
         }
 
-        // ─── INotifyPropertyChanged ───────────────────────────────────────
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string name) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
