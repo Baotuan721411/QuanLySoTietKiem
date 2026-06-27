@@ -1,75 +1,79 @@
 <UserControl x:Class="QuanLiSoTietKiem.QuanLy.Views.QuanLyQuyDinhWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Background="#F5F2E8">
+        Background="#F5F2DF">
 
-    <UserControl.Resources>
+	<UserControl.Resources>
 
-        <Style TargetType="TextBox">
-            <Setter Property="Height" Value="28"/>
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="Padding" Value="6,0"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="BorderBrush" Value="#CCCCCC"/>
-        </Style>
+		<Style TargetType="TextBox">
+			<Setter Property="Height" Value="28"/>
+			<Setter Property="FontSize" Value="13"/>
+			<Setter Property="Padding" Value="6,0"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="BorderBrush" Value="#CCCCCC"/>
+		</Style>
 
-        <Style TargetType="DatePicker">
-            <Setter Property="Height" Value="28"/>
-            <Setter Property="FontSize" Value="13"/>
-        </Style>
+		<Style TargetType="DatePicker">
+			<Setter Property="Height" Value="28"/>
+			<Setter Property="FontSize" Value="13"/>
+		</Style>
 
-        <Style TargetType="Button">
-            <Setter Property="Height" Value="34"/>
-            <Setter Property="Margin" Value="4,0"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="Padding" Value="14,0"/>
-        </Style>
+		<Style TargetType="Button">
+			<Setter Property="Height" Value="34"/>
+			<Setter Property="Margin" Value="4,0"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="FontWeight" Value="SemiBold"/>
+			<Setter Property="BorderThickness" Value="0"/>
+			<Setter Property="Cursor" Value="Hand"/>
+			<Setter Property="FontSize" Value="13"/>
+			<Setter Property="Padding" Value="14,0"/>
+		</Style>
 
-        <Style TargetType="DataGrid">
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="RowHeight" Value="30"/>
-            <Setter Property="AlternatingRowBackground" Value="#FFF8E7"/>
-            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
-            <Setter Property="HorizontalGridLinesBrush" Value="#E0D9C8"/>
-            <Setter Property="BorderBrush" Value="#CCCCCC"/>
-            <Setter Property="SelectionMode" Value="Single"/>
-            <Setter Property="AutoGenerateColumns" Value="False"/>
-            <Setter Property="CanUserAddRows" Value="False"/>
-            <Setter Property="CanUserDeleteRows" Value="False"/>
-            <Setter Property="IsReadOnly" Value="True"/>
-        </Style>
+		<Style TargetType="DataGrid">
+			<Setter Property="FontSize" Value="13"/>
+			<Setter Property="RowHeight" Value="30"/>
+			<Setter Property="AlternatingRowBackground" Value="#FFF8E7"/>
+			<Setter Property="GridLinesVisibility" Value="Horizontal"/>
+			<Setter Property="HorizontalGridLinesBrush" Value="#E0D9C8"/>
+			<Setter Property="BorderBrush" Value="#CCCCCC"/>
+			<Setter Property="SelectionMode" Value="Single"/>
+			<Setter Property="AutoGenerateColumns" Value="False"/>
+			<Setter Property="CanUserAddRows" Value="False"/>
+			<Setter Property="CanUserDeleteRows" Value="False"/>
+			<Setter Property="IsReadOnly" Value="True"/>
+		</Style>
 
-        <Style TargetType="DataGridColumnHeader">
-            <Setter Property="Background" Value="#F0A500"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Height" Value="34"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="6,0"/>
-        </Style>
+		<Style TargetType="DataGridColumnHeader">
+			<Setter Property="Background" Value="#F0A500"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="FontWeight" Value="Bold"/>
+			<Setter Property="Height" Value="34"/>
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="Padding" Value="6,0"/>
+		</Style>
 
-    </UserControl.Resources>
+	</UserControl.Resources>
 
-    <Grid Margin="20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>   <!-- Tiêu đề -->
-            <RowDefinition Height="Auto"/>   <!-- Form nhập liệu -->
-            <RowDefinition Height="Auto"/>   <!-- Thanh nút -->
-            <RowDefinition Height="*"/>      <!-- DataGrid -->
-        </Grid.RowDefinitions>
+	<Grid Margin="20,20,20,0">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<!-- Tiêu đề -->
+			<RowDefinition Height="Auto"/>
+			<!-- Form nhập liệu -->
+			<RowDefinition Height="*"/>
+			<!-- Khoảng trống -->
+			<RowDefinition Height="Auto"/>
+			<!-- Thanh nút -->
+		</Grid.RowDefinitions>
 
-        <!-- ===== TIÊU ĐỀ ===== -->
-        <Border Grid.Row="0" Background="#F0A500" CornerRadius="6" Padding="16,10" Margin="0,0,0,16">
-            <TextBlock Text="Quản lý quy định loại tiết kiệm"
-                       FontSize="20" FontWeight="Bold" Foreground="White"/>
-        </Border>
+		<!-- ===== TIÊU ĐỀ ===== -->
+		<Border Grid.Row="0" Background="#F5F0A0" CornerRadius="6" Padding="16,10" Margin="0,0,0,16">
+			<TextBlock Text="Quản lý quy định loại tiết kiệm"
+                       FontSize="18" FontWeight="Bold" Foreground="#222222"/>
+		</Border>
 
-        <!-- ===== FORM NHẬP LIỆU ===== -->
-        <Border Grid.Row="1"
+		<!-- ===== FORM NHẬP LIỆU ===== -->
+		<Border Grid.Row="1"
                 Background="White"
                 BorderBrush="#E0D9C8"
                 BorderThickness="1"
@@ -77,164 +81,89 @@
                 Padding="16,14"
                 Margin="0,0,0,10">
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
 
-                <!-- Hàng 1 -->
-                <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,12,10">
-                    <TextBlock Text="Tên Loại tiết kiệm:" FontWeight="SemiBold" Margin="0,0,0,3"/>
-                    <TextBox Text="{Binding TenLoaiChiTiet, UpdateSourceTrigger=PropertyChanged}"/>
-                </StackPanel>
+				<!-- Hàng 1 -->
+				<StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,12,10">
+					<TextBlock Text="Tên Loại tiết kiệm:" FontWeight="SemiBold" Margin="0,0,0,3"/>
+					<TextBox Text="{Binding TenLoaiChiTiet, UpdateSourceTrigger=PropertyChanged}"/>
+				</StackPanel>
 
-                <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,0,12,10">
-                    <TextBlock Text="Ngày áp dụng:" FontWeight="SemiBold" Margin="0,0,0,3"/>
-                    <DatePicker SelectedDate="{Binding NgayApDung}"/>
-                </StackPanel>
+				<StackPanel Grid.Row="0" Grid.Column="1" Margin="0,0,12,10">
+					<TextBlock Text="Ngày áp dụng:" FontWeight="SemiBold" Margin="0,0,0,3"/>
+					<DatePicker SelectedDate="{Binding NgayApDung}"/>
+				</StackPanel>
 
-                <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,10">
-                    <TextBlock Text="Ngày kết thúc:" FontWeight="SemiBold" Margin="0,0,0,3"/>
-                    <DatePicker SelectedDate="{Binding NgayKetThuc}"/>
-                </StackPanel>
+				<StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,10">
+					<TextBlock Text="Ngày kết thúc:" FontWeight="SemiBold" Margin="0,0,0,3"/>
+					<DatePicker SelectedDate="{Binding NgayKetThuc}"/>
+				</StackPanel>
 
-                <!-- Hàng 2 -->
-                <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,12,10">
-                    <TextBlock Text="Quy định Số tiền gửi tối thiểu (VNĐ):" FontWeight="SemiBold" Margin="0,0,0,3"/>
-                    <TextBox Text="{Binding TienGoiToiThieuStr, UpdateSourceTrigger=PropertyChanged}"/>
-                </StackPanel>
+				<!-- Hàng 2 -->
+				<StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,12,10">
+					<TextBlock Text="Quy định Số tiền gửi tối thiểu (VNĐ):" FontWeight="SemiBold" Margin="0,0,0,3"/>
+					<TextBox Text="{Binding TienGoiToiThieuStr, UpdateSourceTrigger=PropertyChanged}"/>
+				</StackPanel>
 
-                <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,0,12,10">
-                    <TextBlock Text="Thời gian gửi tối thiểu (Ngày):" FontWeight="SemiBold" Margin="0,0,0,3"/>
-                    <TextBox Text="{Binding ThoiGianGuiToiThieuStr, UpdateSourceTrigger=PropertyChanged}"/>
-                </StackPanel>
+				<StackPanel Grid.Row="1" Grid.Column="1" Margin="0,0,12,10">
+					<TextBlock Text="Thời gian gửi tối thiểu (Ngày):" FontWeight="SemiBold" Margin="0,0,0,3"/>
+					<TextBox Text="{Binding ThoiGianGuiToiThieuStr, UpdateSourceTrigger=PropertyChanged}"/>
+				</StackPanel>
 
-                <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,0,0,10">
-                    <TextBlock Text="Lãi suất (% / tháng):" FontWeight="SemiBold" Margin="0,0,0,3"/>
-                    <TextBox Text="{Binding LaiSuatStr, UpdateSourceTrigger=PropertyChanged}"/>
-                </StackPanel>
+				<StackPanel Grid.Row="1" Grid.Column="2" Margin="0,0,0,10">
+					<TextBlock Text="Lãi suất (% / tháng):" FontWeight="SemiBold" Margin="0,0,0,3"/>
+					<TextBox Text="{Binding LaiSuatStr, UpdateSourceTrigger=PropertyChanged}"/>
+				</StackPanel>
 
-                <!-- Hàng 3 -->
-                <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,12,0">
-                    <TextBlock Text="Quy định rút tiền:" FontWeight="SemiBold" Margin="0,0,0,3"/>
-                    <ComboBox ItemsSource="{Binding DanhSachQuyDinhRutTien}"
+				<!-- Hàng 3 -->
+				<StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,12,0">
+					<TextBlock Text="Quy định rút tiền:" FontWeight="SemiBold" Margin="0,0,0,3"/>
+					<ComboBox ItemsSource="{Binding DanhSachQuyDinhRutTien}"
                               DisplayMemberPath="TenHienThi"
                               SelectedValuePath="GiaTri"
                               SelectedValue="{Binding QuiDinhRutTien}"
                               Height="28" VerticalContentAlignment="Center"/>
-                </StackPanel>
+				</StackPanel>
 
-            </Grid>
-        </Border>
+			</Grid>
+		</Border>
 
-        <!-- ===== THANH NÚT HÀNH ĐỘNG ===== -->
-        <StackPanel Grid.Row="2"
+		<!-- ===== THANH NÚT HÀNH ĐỘNG (bottom, cùng hàng nút Thoát) ===== -->
+		<StackPanel Grid.Row="3"
                     Orientation="Horizontal"
                     HorizontalAlignment="Left"
-                    Margin="0,0,0,12">
-            <Button Content="➕  Thêm mới"
+                    Margin="0,0,0,15">
+			<Button Content="➕  Thêm mới"
                     Command="{Binding ThemMoiCommand}"
                     Background="#27AE60"
                     Width="120"/>
-            <Button Content="✏️  Cập nhật"
+			<Button Content="✏️  Cập nhật"
                     Command="{Binding CapNhatCommand}"
                     Background="#F0A500"
                     Width="120"/>
-            <Button Content="🗑  Xóa"
+			<Button Content="🗑  Xóa"
                     Command="{Binding XoaCommand}"
                     Background="#E74C3C"
                     Width="120"/>
-            <Button Content="🔄  Làm mới"
+			<Button Content="🔄  Làm mới"
                     Command="{Binding LamMoiCommand}"
                     Background="#7F8C8D"
                     Width="120"/>
-            <Button Content="🔍  Tìm kiếm"
+			<Button Content="🔍  Tìm kiếm"
                     Command="{Binding TimKiemTheoTenCommand}"
                     Background="#3498DB"
                     Width="130"/>
-        </StackPanel>
+		</StackPanel>
 
-        <!-- ===== DANH SÁCH / DATAGRID ===== -->
-        <Border Grid.Row="3"
-                BorderBrush="#E0D9C8"
-                BorderThickness="1"
-                CornerRadius="6"
-                ClipToBounds="True">
-            <DataGrid ItemsSource="{Binding DanhSachLoaiTK}"
-                      SelectedItem="{Binding SelectedLoaiTK, Mode=TwoWay}"
-                      SelectionChanged="DataGrid_SelectionChanged">
-
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Mã loại"
-                                        Binding="{Binding MaLoaiTietKiem}"
-                                        Width="80">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="HorizontalAlignment" Value="Center"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-
-                    <DataGridTextColumn Header="Tên loại tiết kiệm"
-                                        Binding="{Binding TenLoaiTietKiem}"
-                                        Width="*"/>
-
-                    <DataGridTextColumn Header="Thời gian (ngày)"
-                                        Binding="{Binding ThoiGianRutTien}"
-                                        Width="130">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="HorizontalAlignment" Value="Center"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-
-                    <DataGridTextColumn Header="Lãi suất (%/tháng)"
-                                        Binding="{Binding LaiSuat, StringFormat='{}{0:N2}'}"
-                                        Width="130">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="HorizontalAlignment" Value="Center"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-
-                    <DataGridTextColumn Header="Quy định rút tiền"
-                                        Binding="{Binding QuiDinhRutTienText}"
-                                        Width="140">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="HorizontalAlignment" Value="Center"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-
-                    <DataGridTextColumn Header="Tiền gửi tối thiểu (VNĐ)"
-                                        Binding="{Binding TienGoiToiThieu, StringFormat='{}{0:N0}'}"
-                                        Width="170">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="HorizontalAlignment" Value="Right"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="Padding" Value="0,0,8,0"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                </DataGrid.Columns>
-
-            </DataGrid>
-        </Border>
-
-    </Grid>
+	</Grid>
 </UserControl>

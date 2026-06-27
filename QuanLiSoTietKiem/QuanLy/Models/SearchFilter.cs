@@ -32,7 +32,8 @@ namespace QuanLiSoTietKiem.QuanLy.Models
         // Row 4 – Quy định loại tiết kiệm
         public string QuyDinhThoiGian { get; set; }
         public string QuyDinhRutTien { get; set; }
-        public string LaiSuat { get; set; }
+        public decimal? LaiSuatTu { get; set; }
+        public decimal? LaiSuatDen { get; set; }
 
         // Row 5 – Mã phiếu
         public string MaPhieuGoi { get; set; }

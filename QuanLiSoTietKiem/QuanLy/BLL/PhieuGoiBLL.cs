@@ -53,6 +53,9 @@ namespace QuanLiSoTietKiem.QuanLy.BLL
             if (phieu.SoTienGoi < ts.SoTienGoiThemToiThieu)
                 return $"Số tiền gởi thêm tối thiểu phải là {ts.SoTienGoiThemToiThieu:N0} VNĐ!";
 
+            if (phieu.NgayGoi.Date < soGoc.NgayMoSo.Date)
+                return $"Ngày gởi ({phieu.NgayGoi:dd/MM/yyyy}) không được nhỏ hơn ngày mở sổ ({soGoc.NgayMoSo.Date:dd/MM/yyyy})!";
+
             // ── 4. Tính lãi tích lũy từ kỳ trước đến ngày gởi ────────────────
             decimal tienLai = TinhLaiTichLuy(soGoc, loaiCuaSo, phieu.NgayGoi);
 

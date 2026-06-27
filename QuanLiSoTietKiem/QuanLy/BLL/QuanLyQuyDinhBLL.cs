@@ -64,8 +64,15 @@ namespace QuanLiSoTietKiem.QuanLy.BLL
                     int rows = _dal.UpdateLoai(loai, conn, tran);
                     if (rows == 0) return "Không tìm thấy loại tiết kiệm để cập nhật!";
 
-                    _dal.DongKyLichSuCu(loai.MaLoaiTietKiem, ngayApDung, conn, tran);
-                    _dal.GhiLichSuLaiSuat(loai.MaLoaiTietKiem, loai.LaiSuat, ngayApDung, ngayKetThuc, conn, tran);
+                    // Chỉ ghi lịch sử lãi suất mới khi lãi suất thực sự thay đổi
+                    decimal? laiSuatCu = _dal.GetLaiSuatHienTai(loai.MaLoaiTietKiem);
+                    bool laiSuatThayDoi = laiSuatCu == null || laiSuatCu.Value != loai.LaiSuat;
+
+                    if (laiSuatThayDoi)
+                    {
+                        _dal.DongKyLichSuCu(loai.MaLoaiTietKiem, ngayApDung, conn, tran);
+                        _dal.GhiLichSuLaiSuat(loai.MaLoaiTietKiem, loai.LaiSuat, ngayApDung, ngayKetThuc, conn, tran);
+                    }
 
                     tran.Commit();
                     return "SUCCESS";

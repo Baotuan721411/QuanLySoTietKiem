@@ -244,6 +244,31 @@ namespace QuanLiSoTietKiem.QuanLy.DAL
                                   : rdr.GetDateTime("NgayKetThuc")
         };
 
+        /// <summary>
+        /// Lấy lãi suất đang có hiệu lực của một loại để so sánh trước khi ghi lịch sử mới.
+        /// Trả về null nếu chưa có bản ghi nào.
+        /// </summary>
+        public decimal? GetLaiSuatHienTai(int maLoai)
+        {
+            using (var conn = new MySqlConnection(_connStr))
+            {
+                conn.Open();
+                var cmd = new MySqlCommand(
+                    @"SELECT LaiSuatCuaKyHan
+                      FROM lich_su_lai_suat
+                      WHERE MaLoaiTietKiem = @ma
+                        AND NgayApDung <= CURDATE()
+                        AND (NgayKetThuc IS NULL OR NgayKetThuc >= CURDATE())
+                      ORDER BY NgayApDung DESC
+                      LIMIT 1", conn);
+                cmd.Parameters.AddWithValue("@ma", maLoai);
+                var result = cmd.ExecuteScalar();
+                return result == null || result == DBNull.Value
+                       ? (decimal?)null
+                       : Convert.ToDecimal(result);
+            }
+        }
+
         public MySqlConnection OpenConnection()
         {
             var conn = new MySqlConnection(_connStr);

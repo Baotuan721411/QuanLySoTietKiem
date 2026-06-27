@@ -154,11 +154,18 @@ namespace QuanLiSoTietKiem.QuanLy.ViewModels
             set { _filterQuyDinhRutTien = value; OnPropertyChanged(nameof(FilterQuyDinhRutTien)); }
         }
 
-        private string _filterLaiSuat;
-        public string FilterLaiSuat
+        private string _filterLaiSuatTu;
+        public string FilterLaiSuatTu
         {
-            get => _filterLaiSuat;
-            set { _filterLaiSuat = value; OnPropertyChanged(nameof(FilterLaiSuat)); }
+            get => _filterLaiSuatTu;
+            set { _filterLaiSuatTu = value; OnPropertyChanged(nameof(FilterLaiSuatTu)); }
+        }
+
+        private string _filterLaiSuatDen;
+        public string FilterLaiSuatDen
+        {
+            get => _filterLaiSuatDen;
+            set { _filterLaiSuatDen = value; OnPropertyChanged(nameof(FilterLaiSuatDen)); }
         }
 
         #endregion
@@ -253,7 +260,6 @@ namespace QuanLiSoTietKiem.QuanLy.ViewModels
         public ObservableCollection<string> ListTrangThai { get; } = new ObservableCollection<string>();
         public ObservableCollection<string> ListQuyDinhThoiGian { get; } = new ObservableCollection<string>();
         public ObservableCollection<string> ListQuyDinhRutTien { get; } = new ObservableCollection<string>();
-        public ObservableCollection<string> ListLaiSuat { get; } = new ObservableCollection<string>();
 
         // ============================================================
         // KẾT QUẢ TRA CỨU (DataGrid source)
@@ -321,7 +327,8 @@ namespace QuanLiSoTietKiem.QuanLy.ViewModels
                 // Row 4
                 QuyDinhThoiGian = FilterQuyDinhThoiGian,
                 QuyDinhRutTien = FilterQuyDinhRutTien,
-                LaiSuat = FilterLaiSuat,
+                LaiSuatTu = TryParseDecimal(FilterLaiSuatTu),
+                LaiSuatDen = TryParseDecimal(FilterLaiSuatDen),
 
                 // Row 5
                 MaPhieuGoi = FilterMaPhieuGoi,
@@ -377,7 +384,8 @@ namespace QuanLiSoTietKiem.QuanLy.ViewModels
 
             FilterQuyDinhThoiGian = ListQuyDinhThoiGian.Count > 0 ? ListQuyDinhThoiGian[0] : null;
             FilterQuyDinhRutTien = ListQuyDinhRutTien.Count > 0 ? ListQuyDinhRutTien[0] : null;
-            FilterLaiSuat = ListLaiSuat.Count > 0 ? ListLaiSuat[0] : null;
+            FilterLaiSuatTu = string.Empty;
+            FilterLaiSuatDen = string.Empty;
 
             FilterMaPhieuGoi = string.Empty;
             FilterMaPhieuRut = string.Empty;
@@ -428,16 +436,6 @@ namespace QuanLiSoTietKiem.QuanLy.ViewModels
             ListQuyDinhRutTien.Add("Rút 1 phần");
             ListQuyDinhRutTien.Add("Rút toàn bộ");
             FilterQuyDinhRutTien = "Tất cả";
-
-            // ── Lãi suất: lấy từ DB, format "X.XX%" ─────────────────
-            ListLaiSuat.Add("Tất cả");
-            var daThemLai = new System.Collections.Generic.HashSet<decimal>();
-            foreach (var loai in dsLoai)
-            {
-                if (daThemLai.Add(loai.LaiSuat))
-                    ListLaiSuat.Add(loai.LaiSuat.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture) + "%");
-            }
-            FilterLaiSuat = "Tất cả";
         }
 
         /// <summary>

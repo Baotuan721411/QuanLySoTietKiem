@@ -37,8 +37,12 @@ namespace QuanLiSoTietKiem.QuanLy.BLL
                 return $"Thất bại: Sổ mới mở được {soNgayTuLucMoSo} ngày. " +
                        $"Theo quy định của loại sổ này, phải sau ít nhất {loai.ThoiGianRutTien} ngày " +
                        $"kể từ ngày mở sổ ({stk.NgayMoSo:dd/MM/yyyy}) mới được phép rút tiền!";
+            // -- 4. Kiểm tra trạng thái sổ
+            bool TrangThaiSo = stk.TrangThai;
+            if (TrangThaiSo == false)
+                return "Sổ tiết kiệm đã đóng, không thể thực hiện rút tiền!";
 
-            // ── 4. Ngày bắt đầu tính lãi ─────────────────────────────────────
+            // ── 5. Ngày bắt đầu tính lãi ─────────────────────────────────────
             //       = NgayMoSo nếu chưa rút lần nào
             //       = NgayCapNhatGanNhat nếu đã rút một phần trước đó
             //       (SearchSoTietKiem trả về DateTime.MinValue khi NgayCapNhatGanNhat là NULL)
@@ -50,17 +54,17 @@ namespace QuanLiSoTietKiem.QuanLy.BLL
                     ? ngayCapNhat
                     : stk.NgayMoSo;
 
-            // ── 5. Lấy lịch sử lãi suất ──────────────────────────────────────
+            // ── 6. Lấy lịch sử lãi suất ──────────────────────────────────────
             List<LichSuLaiSuat> lichSu = _ls.GetLichSuLaiSuat(stk.MaLoaiTietKiem);
             if (lichSu == null || lichSu.Count == 0)
                 return "Lỗi hệ thống: Không tìm thấy lịch sử lãi suất cho loại tiết kiệm này!";
 
-            // ── 6. Thông số kỳ hạn ────────────────────────────────────────────
+            // ── 7. Thông số kỳ hạn ────────────────────────────────────────────
             bool laKhongKyHan = loai.TenLoaiTietKiem.ToLower().Contains("không kỳ hạn");
             int kyHanNgay = laKhongKyHan ? 30 : loai.ThoiGianRutTien;
             decimal kyHanThang = laKhongKyHan ? 1m : (loai.ThoiGianRutTien / 30m);
 
-            // ── 7. Tính lãi — gọi hàm dùng chung ở SoTietKiemBLL ────────────
+            // ── 8. Tính lãi — gọi hàm dùng chung ở SoTietKiemBLL ────────────
             decimal tienLai = SoTietKiemBLL.TinhTienLaiTheoPhanKy(
                 stk.SoTien,
                 ngayBatDauTinhLai,
@@ -72,7 +76,7 @@ namespace QuanLiSoTietKiem.QuanLy.BLL
             decimal soTienHienCo = stk.SoTien + tienLai;
             decimal soTienConLai;
 
-            // ── 8. Kiểm tra số tiền rút ───────────────────────────────────────
+            // ── 9. Kiểm tra số tiền rút ───────────────────────────────────────
             if (laKhongKyHan)
             {
                 if (phieu.SoTienRut > soTienHienCo)
@@ -92,7 +96,7 @@ namespace QuanLiSoTietKiem.QuanLy.BLL
 
             bool trangThaiMoi = soTienConLai > stk.SoDuToiThieu;
 
-            // ── 9. Ghi DB ─────────────────────────────────────────────────────
+            // ── 10. Ghi DB ─────────────────────────────────────────────────────
             return _dbRut.SavePhieuRutTien(phieu, soTienConLai, trangThaiMoi);
         }
     }

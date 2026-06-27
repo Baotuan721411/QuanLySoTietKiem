@@ -49,7 +49,8 @@
 
         <!-- TITLE -->
         <TextBlock Text="Quản lý sổ tiết kiệm"
-                   FontSize="22"
+                   Background="#F5F0A0" Padding="16,10"
+                   FontSize="18"
                    FontWeight="Bold"
                    Foreground="#222"
                    Margin="0,0,0,18"/>
@@ -81,7 +82,7 @@
                 <ComboBox ItemsSource="{Binding ListLoaiTK}"
                           SelectedValuePath="MaLoaiTietKiem"
                           DisplayMemberPath="TenLoaiTietKiem"
-                          SelectedValue="{Binding SelectedLoaiId}"/>
+                          SelectedValue="{Binding SelectedLoaiId}" SelectionChanged="ComboBox_SelectionChanged"/>
             </StackPanel>
 
             <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,10">

@@ -102,30 +102,34 @@
                              Style="{StaticResource MenuButtonStyle}"
                              Tag="BaoCaoMoDong"
                              Checked="MenuButton_Checked"/>
-				<RadioButton Content="  Quản lý quy định"
-                 GroupName="Menu"
-                 Style="{StaticResource MenuButtonStyle}"
-                 Tag="QuanLyQuyDinh"
-                 Checked="MenuButton_Checked"/>
+
+                <RadioButton Content="  Quản lý quy định"
+                             GroupName="Menu"
+                             Style="{StaticResource MenuButtonStyle}"
+                             Tag="QuanLyQuyDinh"
+                             Checked="MenuButton_Checked"/>
             </StackPanel>
 
-            <!-- Thoát ở dưới cùng -->
-            <Button DockPanel.Dock="Bottom"
-                    Content="⏻   Thoát"
-                    Click="Thoat_Click"
-                    Margin="16,16"
-                    Height="42"
-                    Background="#C0392B"
-                    Foreground="White"
-                    FontSize="13"
-                    FontWeight="Bold"
-                    BorderThickness="0"
-                    Cursor="Hand"/>
         </DockPanel>
 
         <!-- ===== CONTENT AREA ===== -->
         <Border Grid.Column="1" Background="#F5F2E8">
-            <ContentControl x:Name="ContentArea"/>
+            <Grid>
+                <ContentControl x:Name="ContentArea"/>
+                <Button Content="Thoát"
+                        Click="Thoat_Click"
+                        Width="100" Height="36"
+                        Margin="1,1,18,15"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom"
+                        Background="#E74C3C"
+                        Foreground="White"
+                        FontSize="13"
+                        FontWeight="Bold"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        Panel.ZIndex="10"/>
+            </Grid>
         </Border>
 
     </Grid>

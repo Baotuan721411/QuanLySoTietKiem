@@ -12,5 +12,9 @@ namespace QuanLiSoTietKiem.QuanLy.Views
             DataContext = new SoTietKiemViewModel();
         }
 
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

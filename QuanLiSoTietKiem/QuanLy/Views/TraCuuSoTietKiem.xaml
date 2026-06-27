@@ -278,10 +278,22 @@
                             <ComboBox ItemsSource="{Binding ListQuyDinhRutTien}" SelectedItem="{Binding FilterQuyDinhRutTien}"/>
                         </StackPanel>
 
-                        <StackPanel Grid.Column="4">
-                            <TextBlock Text="Lãi suất" Style="{StaticResource LabelStyle}"/>
-                            <ComboBox ItemsSource="{Binding ListLaiSuat}" SelectedItem="{Binding FilterLaiSuat}"/>
-                        </StackPanel>
+                        <Grid Grid.Column="4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" VerticalAlignment="Center" FontSize="12" FontWeight="SemiBold">
+                                <Run Text="Lãi suất "/>
+                                <Run Text="từ" Foreground="#FF0000"/>
+                            </TextBlock>
+                            <TextBox Grid.Column="2" Text="{Binding FilterLaiSuatTu, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock Grid.Column="3" Text="đến" Style="{StaticResource RedLabelStyle}"/>
+                            <TextBox Grid.Column="4" Text="{Binding FilterLaiSuatDen, UpdateSourceTrigger=PropertyChanged}"/>
+                        </Grid>
                     </Grid>
 
                     <!-- ROW 5+6+7 -->

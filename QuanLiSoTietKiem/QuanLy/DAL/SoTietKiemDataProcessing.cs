@@ -280,26 +280,26 @@ namespace QuanLiSoTietKiem.QuanLy.DAL
                     p.Add(new MySqlParameter("@quydinhrut", f.QuyDinhRutTien == "Rút 1 phần" ? 1 : 0));
                 }
 
-                // ── Row 4: Lãi suất — lọc qua lich_su_lai_suat (lãi suất hiện hành) ──
-                // Vì LaiSuat đã bị xóa khỏi loai_tiet_kiem, lọc theo lãi suất đang áp dụng
-                // (NgayApDung <= NOW() AND (NgayKetThuc IS NULL OR NgayKetThuc >= NOW()))
-                if (!string.IsNullOrWhiteSpace(f.LaiSuat) && f.LaiSuat != "Tất cả")
+                // ── Row 4: Lãi suất — lọc theo khoảng từ–đến qua lich_su_lai_suat (lãi suất hiện hành) ──
+                if (f.LaiSuatTu.HasValue)
                 {
-                    var lsStr = f.LaiSuat.Trim().TrimEnd('%').Trim();
-                    bool parsed = decimal.TryParse(lsStr, System.Globalization.NumberStyles.Any,
-                                                   System.Globalization.CultureInfo.InvariantCulture, out decimal ls)
-                               || decimal.TryParse(lsStr, System.Globalization.NumberStyles.Any,
-                                                   System.Globalization.CultureInfo.CurrentCulture, out ls);
-                    if (parsed)
-                    {
-                        sql.Append(@" AND EXISTS (
-                            SELECT 1 FROM lich_su_lai_suat ls
-                            WHERE ls.MaLoaiTietKiem = l.MaLoaiTietKiem
-                              AND ls.LaiSuatCuaKyHan = @laisuat
-                              AND ls.NgayApDung <= NOW()
-                              AND (ls.NgayKetThuc IS NULL OR ls.NgayKetThuc >= NOW()))");
-                        p.Add(new MySqlParameter("@laisuat", ls));
-                    }
+                    sql.Append(@" AND EXISTS (
+                        SELECT 1 FROM lich_su_lai_suat ls
+                        WHERE ls.MaLoaiTietKiem = l.MaLoaiTietKiem
+                          AND ls.LaiSuatCuaKyHan >= @laisuattu
+                          AND ls.NgayApDung <= NOW()
+                          AND (ls.NgayKetThuc IS NULL OR ls.NgayKetThuc >= NOW()))");
+                    p.Add(new MySqlParameter("@laisuattu", f.LaiSuatTu.Value));
+                }
+                if (f.LaiSuatDen.HasValue)
+                {
+                    sql.Append(@" AND EXISTS (
+                        SELECT 1 FROM lich_su_lai_suat ls
+                        WHERE ls.MaLoaiTietKiem = l.MaLoaiTietKiem
+                          AND ls.LaiSuatCuaKyHan <= @laisuatden
+                          AND ls.NgayApDung <= NOW()
+                          AND (ls.NgayKetThuc IS NULL OR ls.NgayKetThuc >= NOW()))");
+                    p.Add(new MySqlParameter("@laisuatden", f.LaiSuatDen.Value));
                 }
 
                 // ── Row 5 & 6: Mã phiếu gởi, Ngày gởi, Số tiền gởi ─────────────
