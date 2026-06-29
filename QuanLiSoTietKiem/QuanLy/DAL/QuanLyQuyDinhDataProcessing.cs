@@ -85,7 +85,7 @@ namespace QuanLiSoTietKiem.QuanLy.DAL
                              ON ls.MaLoaiTietKiem = l.MaLoaiTietKiem
                             AND ls.NgayApDung <= CURDATE()
                             AND (ls.NgayKetThuc IS NULL OR ls.NgayKetThuc >= CURDATE())
-                      WHERE l.TenLoaiTietKiem = @ten
+                      WHERE l.TenLoaiTietKiem like @ten
                       LIMIT 1", conn);
                 cmd.Parameters.AddWithValue("@ten", tenLoai);
                 using (var rdr = cmd.ExecuteReader())

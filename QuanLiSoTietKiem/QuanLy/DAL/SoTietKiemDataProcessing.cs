@@ -405,13 +405,7 @@ namespace QuanLiSoTietKiem.QuanLy.DAL
             return list;
         }
 
-        // ============================================================
-        // Bổ sung cho thuật toán lập báo cáo 9 bước
-        // ============================================================
 
-        /// <summary>
-        /// Bước 03: Lấy danh sách Sổ tiết kiệm theo Mã loại tiết kiệm.
-        /// </summary>
         public List<SoTietKiem> GetSoTietKiemByLoai(int maLoaiTietKiem)
         {
             var list = new List<SoTietKiem>();
