@@ -13,6 +13,71 @@ namespace QuanLiSoTietKiem.QuanLy.DAL
         /// Lấy báo cáo doanh thu gom nhóm theo Loại tiết kiệm trong tháng.
         /// TongThu = tổng tiền gởi, TongChi = tổng tiền rút trong tháng đó.
         /// </summary>
+
+        public List<PhieuGoi> GetPhieuGoiTheoThangNam(string maSo, int thang, int nam)
+        {
+            var list = new List<PhieuGoi>();
+            using (var conn = new MySqlConnection(connStr))
+            {
+                conn.Open();
+                var cmd = new MySqlCommand(
+                    @"SELECT MaPhieuGoi, MaSo, NgayGoi, SoTienGoi
+                      FROM phieu_goi
+                      WHERE MaSo = @maso
+                        AND MONTH(NgayGoi) = @thang
+                        AND YEAR(NgayGoi)  = @nam", conn);
+                cmd.Parameters.AddWithValue("@maso", maSo);
+                cmd.Parameters.AddWithValue("@thang", thang);
+                cmd.Parameters.AddWithValue("@nam", nam);
+                using (var rdr = cmd.ExecuteReader())
+                {
+                    while (rdr.Read())
+                    {
+                        list.Add(new PhieuGoi
+                        {
+                            MaPhieuGoi = rdr.GetString("MaPhieuGoi"),
+                            MaSo = rdr.GetString("MaSo"),
+                            NgayGoi = rdr.GetDateTime("NgayGoi"),
+                            SoTienGoi = rdr.GetDecimal("SoTienGoi")
+                        });
+                    }
+                }
+            }
+            return list;
+        }
+
+
+        public List<PhieuRut> GetPhieuRutTheoThangNam(string maSo, int thang, int nam)
+        {
+            var list = new List<PhieuRut>();
+            using (var conn = new MySqlConnection(connStr))
+            {
+                conn.Open();
+                var cmd = new MySqlCommand(
+                    @"SELECT MaPhieuRut, MaSo, NgayRut, SoTienRut
+                      FROM phieu_rut
+                      WHERE MaSo = @maso
+                        AND MONTH(NgayRut) = @thang
+                        AND YEAR(NgayRut)  = @nam", conn);
+                cmd.Parameters.AddWithValue("@maso", maSo);
+                cmd.Parameters.AddWithValue("@thang", thang);
+                cmd.Parameters.AddWithValue("@nam", nam);
+                using (var rdr = cmd.ExecuteReader())
+                {
+                    while (rdr.Read())
+                    {
+                        list.Add(new PhieuRut
+                        {
+                            MaPhieuRut = rdr.GetString("MaPhieuRut"),
+                            MaSo = rdr.GetString("MaSo"),
+                            NgayRut = rdr.GetDateTime("NgayRut"),
+                            SoTienRut = rdr.GetDecimal("SoTienRut")
+                        });
+                    }
+                }
+            }
+            return list;
+        }
         public List<BaoCaoDoanhThuModel> GetBaoCaoDoanhThuTheoThang(int nam, int thang)
         {
             var list = new List<BaoCaoDoanhThuModel>();

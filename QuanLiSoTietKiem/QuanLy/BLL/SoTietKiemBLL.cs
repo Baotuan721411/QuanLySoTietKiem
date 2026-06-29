@@ -158,10 +158,10 @@ namespace QuanLiSoTietKiem.QuanLy.BLL
             => _db.GetSoTietKiemByLoai(maLoaiTietKiem);
 
         public List<PhieuGoi> GetPhieuGoiTheoThangNam(string maSo, int thang, int nam)
-            => _bcmodong.GetPhieuGoiTheoThangNam(maSo, thang, nam);
+            => _bcdoanhthu.GetPhieuGoiTheoThangNam(maSo, thang, nam);
 
         public List<PhieuRut> GetPhieuRutTheoThangNam(string maSo, int thang, int nam)
-            => _bcmodong.GetPhieuRutTheoThangNam(maSo, thang, nam);
+            => _bcdoanhthu.GetPhieuRutTheoThangNam(maSo, thang, nam);
 
         public int DemSoMoTheoNgayVaLoai(DateTime ngayN, int maLoai)
             => _bcmodong.DemSoMoTheoNgayVaLoai(ngayN, maLoai);

@@ -80,7 +80,7 @@ namespace QuanLiSoTietKiem.QuanLy.ViewModels
         private void ExecuteLapBaoCao()
         {
             // Bước 01: Nhận D1 – Năm, Tháng và Loại tiết kiệm từ người dùng
-            if (!int.TryParse(NamBaoCao, out int nam) || nam < 1900)
+            if (!int.TryParse(NamBaoCao, out int nam) || nam < 0)
             {
                 MessageBox.Show("Vui lòng nhập năm hợp lệ.",
                     "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
