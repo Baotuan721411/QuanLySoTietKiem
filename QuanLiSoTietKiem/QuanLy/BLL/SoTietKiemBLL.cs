@@ -26,18 +26,9 @@ namespace QuanLiSoTietKiem.QuanLy.BLL
         public ThamSo GetThamSo() => _db.GetThamSo();
 
         public LoaiTietKiem GetLoaiTietKiemByMaSo(string maSo) => _ltk.GetLoaiTietKiemByMaSo(maSo);
-
-        /// <summary>
-        /// Lấy lịch sử lãi suất của một loại tiết kiệm (sắp xếp theo NgayApDung tăng dần).
-        /// </summary>
         public List<LichSuLaiSuat> GetLichSuLaiSuat(int maLoaiTietKiem)
             => _ls.GetLichSuLaiSuat(maLoaiTietKiem);
 
-        /// <summary>
-        /// Tra lãi suất đang có hiệu lực tại một ngày cụ thể.
-        /// Điều kiện: NgayApDung <= ngay AND (NgayKetThuc IS NULL OR NgayKetThuc >= ngay)
-        /// Trả về 0 nếu không tìm thấy giai đoạn phù hợp.
-        /// </summary>
         private static decimal TraLaiSuatTaiNgay(DateTime ngay, List<LichSuLaiSuat> lichSu)
         {
             foreach (var gs in lichSu)

@@ -59,6 +59,9 @@ namespace QuanLiSoTietKiem.QuanLy.BLL
             // ── 4. Tính lãi tích lũy từ kỳ trước đến ngày gởi ────────────────
             decimal tienLai = TinhLaiTichLuy(soGoc, loaiCuaSo, phieu.NgayGoi);
 
+            bool TrangThaiSo = soGoc.TrangThai;
+            if (TrangThaiSo == false)
+                return "Sổ tiết kiệm đã đóng, không thể thực hiện gởi tiền!";
             // ── 5. Lưu phiếu + cộng (tiền gởi + lãi) vào sổ ─────────────────
             return _dbGoi.SavePhieuGoiTien(phieu, tienLai)
                 ? "SUCCESS"
