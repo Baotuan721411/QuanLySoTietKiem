@@ -10,10 +10,6 @@ namespace QuanLiSoTietKiem.QuanLy.DAL
     {
         private readonly string connStr = ConfigurationManager.ConnectionStrings["MyDbConn"].ConnectionString;
 
-        /// <summary>
-        /// Bước 04: Lấy danh sách Phiếu gởi theo Mã sổ, lọc theo tháng và năm.
-        /// </summary>
-        
 
         public int DemSoMoTheoNgayVaLoai(DateTime ngayN, int maLoai)
         {

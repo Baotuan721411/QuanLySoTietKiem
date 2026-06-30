@@ -58,25 +58,6 @@ namespace QuanLiSoTietKiem.QuanLy.BLL
         ///     tongLai += laiKy
         ///     kyBatDau = kyKetThuc   (chuyển sang kỳ tiếp theo)
         ///
-        /// Ví dụ:
-        ///   Sổ mở 01/01/2024, kỳ hạn 30 ngày, gốc 10tr, rút 01/10/2024
-        ///   Lãi suất 6%  từ 01/01/2024 → 31/05/2024
-        ///   Lãi suất 8%  từ 01/06/2024 → NULL
-        ///
-        ///   Kỳ 1: bắt đầu 01/01 → kết thúc 31/01  → tra lãi tại 01/01 = 6% → tính 6%
-        ///   Kỳ 2: bắt đầu 31/01 → kết thúc 01/03  → tra lãi tại 31/01 = 6% → tính 6%
-        ///   Kỳ 3: bắt đầu 01/03 → kết thúc 31/03  → tra lãi tại 01/03 = 6% → tính 6%
-        ///   Kỳ 4: bắt đầu 31/03 → kết thúc 30/04  → tra lãi tại 31/03 = 6% → tính 6%
-        ///   Kỳ 5: bắt đầu 30/04 → kết thúc 30/05  → tra lãi tại 30/04 = 6% → tính 6%
-        ///   Kỳ 6: bắt đầu 30/05 → kết thúc 29/06  → tra lãi tại 30/05 = 6% → tính 6%
-        ///                          ↑ lãi suất đổi 01/06 nhưng kỳ này bắt đầu 30/05 → vẫn 6%
-        ///   Kỳ 7: bắt đầu 29/06 → kết thúc 29/07  → tra lãi tại 29/06 = 8% → tính 8%
-        ///   Kỳ 8: bắt đầu 29/07 → kết thúc 28/08  → tra lãi tại 29/07 = 8% → tính 8%
-        ///   Kỳ 9: bắt đầu 28/08 → kết thúc 27/09  → tra lãi tại 28/08 = 8% → tính 8%
-        ///   Kỳ 10: bắt đầu 27/09 → kết thúc 27/10 → 27/10 > 01/10 → DỪNG, không tính
-        ///
-        ///   tongLai = 10tr × 6 × 6% × 1  +  10tr × 3 × 8% × 1
-        ///           = 3.600.000 + 2.400.000 = 6.000.000 VNĐ
         /// </summary>
         public static decimal TinhTienLaiTheoPhanKy(
             decimal soTienGoc,
